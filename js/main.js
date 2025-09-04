@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hamburgerBtn.addEventListener('click', () => {
         fullScreenMenu.classList.toggle('active');
+        fullScreenMenu.classList.toggle('opened');
         fullScreenBackground.classList.toggle('active');
         navbarOriginal.classList.toggle('display-none');
     });
     hamburgerBtn2.addEventListener('click', () => {
         fullScreenMenu.classList.toggle('active');
+        fullScreenMenu.classList.toggle('opened');
         fullScreenBackground.classList.toggle('active');
         navbarOriginal.classList.toggle('display-none');
     });
