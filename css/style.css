@@ -422,12 +422,12 @@ body, html {
   }
   
   .detail-section {
-    top: 100vh;
     padding: 40px 20px;
   }
   
   .detail-content {
-    margin-top: 60px;
+    margin-top: 80px;
+    padding-bottom: 30px;
   }
   
   .detail-content h2 {
