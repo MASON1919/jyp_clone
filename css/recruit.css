@@ -1,0 +1,186 @@
+.recruit-title{
+    margin-top: 10rem;
+    margin-left: 4rem;
+    margin: 0;
+    padding: 10rem 4rem;
+    font-size: 1.5rem;
+    background-color: white;
+}
+
+.recruit-video-container {
+    margin-top: 0;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+    position: relative;
+    background-color: black;
+}
+
+.recruit-video-container video {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Pretendard, sans-serif;
+    margin: 0;
+}
+
+ul {
+    padding-left: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.recruit-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 2rem 5rem;
+    background-color: #fff; 
+    position: relative; 
+    z-index: 1;
+}
+
+
+.system-section {
+    position: relative;
+    padding: 80px 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.system-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 48px;
+    font-weight: 900;
+    color: #333;
+    margin: 0;
+    line-height: 1.1;
+    overflow: hidden;
+    z-index: 11;
+}
+
+.system-title .highlight {
+    color: #007bff;
+}
+
+.content-box {
+    width: 100%; 
+    padding: 30px;
+    background-color: #f8f9fa; 
+    border-radius: 8px;
+}
+
+.system-section.reverse .system-title {
+    top: auto;
+    left: auto; 
+    bottom: 0;
+    right: 0;
+    text-align: right;
+}
+
+.system-section.reverse .content-box {
+    margin-left: auto;
+}
+.system-section.reverse {
+    justify-content: flex-start;
+}
+body *{
+    font-family: Pretendard, sans-serif;
+    margin: 0;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+li {
+    font-size: 14px;
+    color: #555;
+}
+li::before { 
+    content: '- ';
+}
+
+.benefit-section {
+    padding: 80px 0;
+    background-color: #fff; /* ★★★ 배경을 가릴 흰색 지정 */
+    position: relative; /* z-index 적용을 위해 필요 */
+    z-index: 1; /* 이미지보다 위에 있도록 설정 */
+}
+.benefit-section .benefit-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.benefit-section h2 {
+    font-size: 48px;
+    font-weight: 900;
+    margin-bottom: 50px;
+}
+.benefit-section > .benefit-container > p {
+    font-size: 16px;
+    color: #333;
+}
+
+
+.benefit-section *{
+    overflow: hidden;
+}
+.benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 40px 20px;
+}
+
+
+.benefit-item {
+    position: relative;
+    padding-left: 65px;
+}
+
+.benefit-item .number {
+    position: absolute;
+    left: 0;
+    top: -10px;
+    font-size: 60px;
+    font-weight: 400;
+    color: #007bff;
+    line-height: 1;
+}
+
+.benefit-item .content {
+    padding-top: 5px;
+}
+.benefit-item h4 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.recruit-image-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+}
+
+.recruit-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.transparent-container{
+    width: 100%;
+    background-color: transparent;
+    height: 20rem;
+}

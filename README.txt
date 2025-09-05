@@ -7,7 +7,6 @@
 
 참고사이트 - jyp 홈페이지
 
-
 모든 페이지에
 <link href="css/navbar.css" rel="stylesheet">
 <link href="css/footer.css" rel="stylesheet">
