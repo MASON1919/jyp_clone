@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: black;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .logo-title {
+            font-size: 1.0em; /* 폰트 크기 조정 */
+            font-weight: bold;
+            color: black;
+            margin: 0;
+        }
+        .tab-menu {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+        .tab-menu a {
+            flex-grow: 1;
+            text-align: center;
+            padding: 15px 0;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+            background-color: #EAEAEA;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border: 1px solid #000;
+            border-bottom: none;
+            font-size: 0.8em; /* 폰트 크기 조정 */
+        }
+        .tab-menu a:not(:last-child) {
+            border-right: none;
+        }
+        .tab-menu a.active {
+            background-color: #ffffff;
+            color: black;
+        }
+        .tab-menu a:hover:not(.active) {
+            background-color: #D3D3D3;
+        }
+        .tab-content {
+            padding: 20px;
+            display: none;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-top: -1px;
+            border: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .section-title {
+            font-size: 1.0em; /* 폰트 크기 조정 */
+            font-weight: bold;
+            margin: 0;
+        }
+        .data-selector {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8em; /* 폰트 크기 조정 */
+            background-color: #fff;
+        }
+        .unit {
+            font-size: 0.8em; /* 폰트 크기 조정 */
+            color: black;
+        }
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8em; /* 폰트 크기 조정 */
+            table-layout: fixed;
+            border-top: 3px solid #000;
+        }
+        .financial-table th, .financial-table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: center;
+        }
+        .financial-table th {
+            background-color: #fafafa;
+            font-weight: normal;
+        }
+        .financial-table tbody tr.highlight-row {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .financial-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .chart-container {
+            margin: 20px auto;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            border-top: 2px solid #000;
+            border-bottom: 0.8px solid #000;
+            padding: 40px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .chart-wrapper {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .chart-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .chart-title {
+            width: 100%;
+            text-align: center;
+            font-size: 1em; /* 폰트 크기 조정 */
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .tooltip {
+            position: absolute;
+            background: #2F3775;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #2F3775;
+        }
+        .highlight-positive {
+            color: black;
+        }
+        .highlight-negative {
+            color: black;
+        }
+
+        /* Top 버튼 CSS 수정 */
+        .top-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            /* 기존 너비/높이/테두리 삭제 */
+            width: auto;
+            height: auto;
+            border: none;
+            background: none;
+            display: flex;
+            flex-direction: column; /* 화살표와 텍스트를 수직으로 정렬 */
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 999;
+        }
+        .top-button.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .top-button span.arrow {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0a0000;
+            line-height: 1; /* 글자 간격 조정 */
+        }
+        .top-button span.text {
+            font-size: 12px;
+            font-weight: bold;
+            color: #0a0000;
+            margin-top: 2px; /* 화살표와 텍스트 사이 간격 */
+        }
+
+        /* 미디어 쿼리 추가 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .tab-menu {
+                flex-wrap: wrap;
+                width: 100%;
+                justify-content: flex-start;
+                padding: 0;
+            }
+            .tab-menu a {
+                flex-basis: 33.333%;
+                border-radius: 0;
+                padding: 10px 0;
+                font-size: 0.8em;
+                border-right: 1px solid #000;
+            }
+            .tab-menu a:first-child {
+                 border-top-left-radius: 10px;
+            }
+            .tab-menu a:last-child {
+                border-right: none;
+                border-top-right-radius: 10px;
+            }
+            .chart-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+                border: none;
+                border-top: 1px solid #000;
+                border-bottom: 1px solid #000;
+            }
+            .chart-wrapper {
+                width: 90%;
+                max-width: 400px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1 class="logo-title">FINANCIAL INFO.</h1>
+    </header>
+
+    <nav class="tab-menu">
+        <a href="#income-statement" class="tab-link active">손익계산서</a>
+        <a href="#balance-sheet" class="tab-link">재무상태표</a>
+        <a href="#cash-flow" class="tab-link">현금흐름표</a>
+    </nav>
+
+    <div id="chart-section" class="chart-container">
+        <!-- Chart will be dynamically created here -->
+    </div>
+
+    <main>
+        <section id="income-statement" class="tab-content active">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <h2 class="section-title">손익계산서</h2>
+                    <select id="income-data-selector" class="data-selector">
+                        <option value="consolidated">연결</option>
+                        <option value="separate">별도</option>
+                    </select>
+                </div>
+                <span class="unit">[단위: 십억 원]</span>
+            </div>
+
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>2020년</th>
+                        <th>2021년</th>
+                        <th>2022년</th>
+                        <th>2023년</th>
+                        <th>2024년</th>
+                    </tr>
+                </thead>
+                <tbody id="income-financial-data">
+                    <!-- 데이터는 JavaScript로 동적으로 로드됩니다 -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="balance-sheet" class="tab-content">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <h2 class="section-title">재무상태표</h2>
+                    <select id="balance-data-selector" class="data-selector">
+                        <option value="consolidated">연결</option>
+                        <option value="separate">별도</option>
+                    </select>
+                </div>
+                <span class="unit">[단위: 십억 원]</span>
+            </div>
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>2020년</th>
+                        <th>2021년</th>
+                        <th>2022년</th>
+                        <th>2023년</th>
+                        <th>2024년</th>
+                    </tr>
+                </thead>
+                <tbody id="balance-financial-data">
+                    <!-- 데이터는 JavaScript로 동적으로 로드됩니다 -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="cash-flow" class="tab-content">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <h2 class="section-title">현금흐름표</h2>
+                    <select id="cash-flow-data-selector" class="data-selector">
+                        <option value="consolidated">연결</option>
+                        <option value="separate">별도</option>
+                    </select>
+                </div>
+                <span class="unit">[단위: 십억 원]</span>
+            </div>
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>2020년</th>
+                        <th>2021년</th>
+                        <th>2022년</th>
+                        <th>2023년</th>
+                        <th>2024년</th>
+                    </tr>
+                </thead>
+                <tbody id="cash-flow-financial-data">
+                    <!-- 데이터는 JavaScript로 동적으로 로드됩니다 -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<!-- Top 버튼 HTML 수정 -->
+<button class="top-button" id="topBtn">
+    <span class="arrow">&uarr;</span>
+    <span class="text">TOP</span>
+</button>
+<!-- Top 버튼 HTML 끝 -->
+
+<script>
+    // --- 데이터 정의 ---
+    const incomeData = {
+        'consolidated': {
+            '매출액': [144.4, 193.9, 345.9, 566.5, 601.8],
+            '매출원가': [67.5, 89.7, 189.3, 298.2, 345.4],
+            '매출총이익': [76.9, 104.2, 156.6, 268.3, 256.4],
+            '판매비와관리비': [32.8, 46.2, 59.9, 98.8, 128.1],
+            '영업이익': [44.1, 57.9, 96.6, 169.4, 128.3],
+            '기타이익': [0.0, 0.6, 0.3, 0.8, 0.4],
+            '기타손실': [2.1, 3.2, 2.1, 6.7, 3.9],
+            '금융수익': [2.9, 18.5, 5.9, 6.1, 14.2],
+            '금융원가': [6.9, 2.6, 7.3, 17.8, 5.2],
+            '법인세비용차감전순이익': [38.0, 85.9, 94.1, 155.7, 136.2],
+            '법인세비용': [8.4, 18.4, 26.6, 50.7, 38.4],
+            '당기순이익': [29.6, 67.5, 67.5, 105.0, 97.7]
+        },
+        'separate': {
+            '매출액': [130.0, 165.2, 291.5, 477.1, 488.3],
+            '매출원가': [66.5, 85.0, 170.5, 259.0, 300.5],
+            '매출총이익': [63.5, 80.2, 121.0, 218.1, 187.8],
+            '판매비와관리비': [26.1, 37.8, 43.0, 66.5, 74.4],
+            '영업이익': [37.4, 42.4, 77.9, 151.5, 113.3],
+            '기타이익': [0.0, 1.2, 0.3, 0.2, 1.2],
+            '기타손실': [2.7, 4.0, 1.8, 2.7, 3.8],
+            '금융수익': [2.7, 17.0, 5.1, 24.8, 11.6],
+            '금융원가': [6.3, 2.7, 6.9, 16.8, 4.6],
+            '법인세비용차감전순이익': [31.1, 53.9, 74.6, 157.2, 117.7],
+            '법인세비용': [6.2, 12.4, 19.7, 37.0, 30.0],
+            '당기순이익': [24.9, 41.5, 54.9, 120.1, 87.7]
+        }
+    };
+
+    const balanceData = {
+        'consolidated': {
+            '자산총계': [223.9, 317.4, 411.1, 571.5, 678.8],
+            '유동자산': [127.0, 159.2, 237.1, 368.8, 362.3],
+            '비유동자산': [97.0, 158.2, 174.0, 202.8, 316.5],
+            '부채총계': [37.7, 66.8, 106.6, 173.5, 195.9],
+            '유동부채': [33.3, 58.3, 101.4, 154.3, 174.8],
+            '비유동부채': [4.4, 8.4, 5.2, 19.1, 21.1],
+            '자본총계': [186.2, 250.6, 304.5, 398.0, 482.9],
+            '자본금': [17.9, 17.9, 17.9, 18.0, 18.0],
+            '자본잉여금': [77.0, 77.0, 77.0, 78.2, 79.1],
+            '기타포괄손익누계액': [-0.1, 1.4, -0.2, -0.9, 4.3],
+            '이익잉여금': [99.9, 162.3, 217.5, 310.8, 389.5],
+            '기타자본': [-12.1, -12.0, -11.7, -12.0, -12.3]
+        },
+        'separate': {
+            '자산총계': [189.9, 254.0, 321.6, 478.3, 556.5],
+            '유동자산': [91.5, 106.4, 159.9, 282.0, 232.5],
+            '비유동자산': [98.4, 147.6, 161.6, 196.3, 324.0],
+            '부채총계': [28.4, 55.7, 81.3, 129.2, 138.4],
+            '유동부채': [25.1, 48.1, 76.9, 119.4, 129.1],
+            '비유동부채': [3.3, 7.7, 4.4, 9.8, 9.3],
+            '자본총계': [161.5, 198.3, 240.3, 349.1, 418.0],
+            '자본금': [17.9, 17.9, 17.9, 18.0, 18.0],
+            '자본잉여금': [68.1, 68.1, 68.1, 69.3, 70.2],
+            '기타포괄손익누계액': [0.4, 0.8, -0.3, -0.2, -0.7],
+            '이익잉여금': [87.1, 123.5, 166.2, 274.1, 342.9],
+            '기타자본': [-12.1, -12.0, -11.7, -12.0, -12.3]
+        }
+    };
+
+    const cashFlowData = {
+        'consolidated': {
+            '영업활동으로인한현금흐름': [22.1, 45.8, 87.6, 151.2, 89.3],
+            '당기순이익': [29.6, 67.5, 67.5, 105.0, 97.7],
+            '현금유출이없는비용등가산': [19.3, 36.3, 41.0, 83.4, 64.8],
+            '현금유입이없는수익등차감': [2.4, 39.8, 6.2, 9.9, 12.4],
+            '영업활동으로인한자산부채변동': [-11.7, -7.7, 5.2, 15.5, -7.4],
+            '투자활동으로인한현금흐름': [-20.3, -25.6, 17.1, -60.7, -99.8],
+            '투자활동현금유입액': [141.1, 99.1, 83.6, 20.0, 72.8],
+            '투자활동현금유출액': [161.4, 124.8, 66.5, 80.7, 172.6],
+            '재무활동으로인한현금흐름': [-5.5, -6.5, -12.8, -13.1, -22.0],
+            '재무활동현금유입액': [1.2, 0.9, 1.5, 2.5, 2.2],
+            '재무활동현금유출액': [1.6, 2.2, 2.1, 3.4, 5.1],
+            '현금의증가': [-4.1, 14.6, 90.5, 77.5, -26.6]
+        },
+        'separate': {
+            '영업활동으로인한현금흐름': [21.7, 50.5, 68.4, 142.7, 52.6],
+            '당기순이익': [24.9, 41.5, 54.9, 120.1, 87.7],
+            '현금유출이없는비용등가산': [16.3, 24.5, 30.4, 60.3, 51.1],
+            '현금유입이없는수익등차감': [2.2, 17.0, 2.8, 22.7, 6.7],
+            '영업활동으로인한자산부채변동': [-7.2, 10.2, -0.4, -0.6, -33.6],
+            '투자활동으로인한현금흐름': [-18.0, -35.0, 12.1, -60.5, -109.8],
+            '투자활동현금유입액': [135.9, 91.1, 77.9, 18.4, 35.2],
+            '투자활동현금유출액': [153.9, 126.1, 65.8, 78.9, 145.0],
+            '재무활동으로인한현금흐름': [-5.3, -6.0, -11.9, -11.0, -20.1],
+            '재무활동현금유입액': [0.9, 0.9, 1.6, 3.3, 2.4],
+            '재무활동현금유출액': [1.1, 1.8, 1.3, 2.1, 3.5],
+            '현금의증가': [-2.1, 9.5, 68.3, 71.1, -77.1]
+        }
+    };
+
+    const dataSources = {
+        'income-statement': {
+            data: incomeData,
+            tableBodyId: 'income-financial-data',
+            selectorId: 'income-data-selector',
+            highlightRows: ['매출액', '매출총이익', '영업이익', '법인세비용차감전순이익', '당기순이익'],
+            chartData: ['매출액', '영업이익', '당기순이익']
+        },
+        'balance-sheet': {
+            data: balanceData,
+            tableBodyId: 'balance-financial-data',
+            selectorId: 'balance-data-selector',
+            highlightRows: ['자산총계', '부채총계', '자본총계'],
+            chartData: ['자산총계', '부채총계', '자본총계']
+        },
+        'cash-flow': {
+            data: cashFlowData,
+            tableBodyId: 'cash-flow-financial-data',
+            selectorId: 'cash-flow-data-selector',
+            highlightRows: ['영업활동으로인한현금흐름', '투자활동으로인한현금흐름', '재무활동으로인한현금흐름', '현금의증가'],
+            chartData: ['영업활동으로인한현금흐름', '투자활동으로인한현금흐름', '재무활동으로인한현금흐름']
+        }
+    };
+
+    const chartScales = {
+        '매출액': { max: 750, ticks: 3, labels: [0, 250, 500, 750] },
+        '영업이익': { max: 200, ticks: 4, labels: [0, 50, 100, 150, 200] },
+        '당기순이익': { max: 150, ticks: 3, labels: [0, 50, 100, 150] },
+        '자산총계': { max: 750, ticks: 3, labels: [0, 250, 500, 750] },
+        '부채총계': { max: 300, ticks: 3, labels: [0, 100, 200, 300] },
+        '자본총계': { max: 750, ticks: 3, labels: [0, 250, 500, 750] },
+        '영업활동으로인한현금흐름': { max: 200, min: 0, ticks: 4, labels: [0, 50, 100, 150, 200] },
+        '투자활동으로인한현금흐름': { max: 50, min: -150, ticks: 4, labels: [-150, -100, -50, 0, 50] },
+        '재무활동으로인한현금흐름': { max: 0, min: -30, ticks: 3, labels: [-30, -20, -10, 0] }
+    };
+
+    let state = {
+        activeTab: 'income-statement',
+        selectedType: 'consolidated',
+    };
+
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const chartSection = document.getElementById('chart-section');
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);
+
+    function renderTable(tableBodyId, data, highlightKeys) {
+        const tableBody = document.getElementById(tableBodyId);
+        if (!tableBody) return;
+
+        tableBody.innerHTML = '';
+        for (const key in data) {
+            const row = document.createElement('tr');
+            if (highlightKeys.includes(key)) {
+                row.classList.add('highlight-row');
+            }
+            let rowHtml = `<td>${key}</td>`;
+            data[key].forEach(value => {
+                if (key === '현금의증가' || key === '투자활동으로인한현금흐름' || key === '재무활동으로인한현금흐름' || key === '영업활동으로인한현금흐름') {
+                    if (value >= 0) {
+                        rowHtml += `<td class="highlight-positive">${value}</td>`;
+                    } else {
+                        rowHtml += `<td class="highlight-negative">${value}</td>`;
+                    }
+                } else {
+                    rowHtml += `<td>${value}</td>`;
+                }
+            });
+            row.innerHTML = rowHtml;
+            tableBody.appendChild(row);
+        }
+    }
+
+    function drawChart(ctx, canvas, key, data, progress = 1) {
+        const scale = chartScales[key];
+        const { values, color } = data;
+        const max = scale.max;
+        const min = scale.min !== undefined ? scale.min : 0;
+        const range = max - min;
+
+        const chartWidth = canvas.width;
+        const chartHeight = canvas.height - 60;
+        const xOffset = 60;
+        const yOffset = 20;
+
+        const totalBars = values.length;
+        const labelMargin = 20;
+        const minBarWidth = 30;
+
+        const availableWidth = chartWidth - xOffset - labelMargin;
+        const barWidth = Math.min(minBarWidth, availableWidth / (totalBars * 2.5));
+        const barGap = (availableWidth - (barWidth * totalBars)) / (totalBars - 1) || 0;
+        const xStart = xOffset + ((chartWidth - xOffset - (barWidth * totalBars) - (barGap * (totalBars - 1))) / 2);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.beginPath();
+        ctx.moveTo(xOffset, yOffset);
+        ctx.lineTo(xOffset, yOffset + chartHeight);
+        ctx.strokeStyle = '#e0e0e0';
+        ctx.stroke();
+
+        ctx.font = '12px Arial';
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'right';
+        scale.labels.forEach((label, i) => {
+            const y = yOffset + chartHeight - ((label - min) / range) * chartHeight;
+            ctx.fillText(label, xOffset - 5, y + 4);
+            ctx.beginPath();
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.moveTo(xOffset, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        });
+
+        const zeroLineY = yOffset + chartHeight - ((0 - min) / range) * chartHeight;
+        ctx.beginPath();
+        ctx.strokeStyle = '#a0a0a0';
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(xOffset, zeroLineY);
+        ctx.lineTo(canvas.width, zeroLineY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.moveTo(xOffset, yOffset + chartHeight);
+        ctx.lineTo(canvas.width, yOffset + chartHeight);
+        ctx.stroke();
+
+        ctx.textAlign = 'center';
+        const years = ['2020년', '2021년', '2022년', '2023년', '2024년'];
+        years.forEach((year, i) => {
+            const x = xStart + (i * (barWidth + barGap)) + (barWidth / 2);
+            ctx.fillText(year.replace('년', ''), x, yOffset + chartHeight + 20);
+        });
+
+        values.forEach((value, i) => {
+            const barHeight = Math.abs((value / range) * chartHeight * progress);
+            const x = xStart + (i * (barWidth + barGap));
+            let y;
+
+            if (value >= 0) {
+                y = yOffset + chartHeight - ((value - min) / range) * chartHeight;
+                ctx.fillStyle = color;
+            } else {
+                y = yOffset + chartHeight - ((0 - min) / range) * chartHeight;
+                ctx.fillStyle = color;
+            }
+
+            ctx.fillRect(x, y, barWidth, barHeight);
+        });
+    }
+
+    function setupCharts(data, chartKeys, animateBars = true) {
+        chartSection.innerHTML = '';
+        const years = ['2020년', '2021년', '2022년', '2023년', '2024년'];
+        const chartDataMap = {
+            '매출액': { values: data['매출액'], color: '#2F3775' },
+            '영업이익': { values: data['영업이익'], color: '#7E98E6' },
+            '당기순이익': { values: data['당기순이익'], color: '#68B596' },
+            '자산총계': { values: data['자산총계'], color: '#2F3775' },
+            '부채총계': { values: data['부채총계'], color: '#7E98E6' },
+            '자본총계': { values: data['자본총계'], color: '#68B596' },
+            '영업활동으로인한현금흐름': { values: data['영업활동으로인한현금흐름'], color: '#2F3775' },
+            '투자활동으로인한현금흐름': { values: data['투자활동으로인한현금흐름'], color: '#7E98E6' },
+            '재무활동으로인한현금흐름': { values: data['재무활동으로인한현금흐름'], color: '#68B596' }
+        };
+
+        chartKeys.forEach(key => {
+            const chartDiv = document.createElement('div');
+            chartDiv.className = 'chart-wrapper';
+
+            const titleElement = document.createElement('div');
+            titleElement.className = 'chart-title';
+            titleElement.textContent = `${key} (단위:십억 원)`;
+            chartDiv.appendChild(titleElement);
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'chart-canvas';
+            chartDiv.appendChild(canvas);
+            chartSection.appendChild(chartDiv);
+
+            const ctx = canvas.getContext('2d');
+            let animationProgress = 0;
+            let animationFrameId = null;
+
+            const animate = () => {
+                animationProgress += 0.02;
+                if (animationProgress < 1) {
+                    drawChart(ctx, canvas, key, chartDataMap[key], animationProgress);
+                    animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    animationProgress = 1;
+                    drawChart(ctx, canvas, key, chartDataMap[key]);
+                }
+            };
+
+            canvas.addEventListener('mousemove', (event) => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+
+                const values = chartDataMap[key].values;
+                const totalBars = values.length;
+                const chartWidth = canvas.width;
+                const xOffset = 60;
+                const labelMargin = 20;
+                const minBarWidth = 30;
+                const availableWidth = chartWidth - xOffset - labelMargin;
+                const barWidth = Math.min(minBarWidth, availableWidth / (totalBars * 2.5));
+                const barGap = (availableWidth - (barWidth * totalBars)) / (totalBars - 1) || 0;
+                const xStart = xOffset + ((chartWidth - xOffset - (barWidth * totalBars) - (barGap * (totalBars - 1))) / 2);
+
+                const scale = chartScales[key];
+                const max = scale.max;
+                const min = scale.min !== undefined ? scale.min : 0;
+                const range = max - min;
+                const chartHeight = canvas.height - 60;
+
+                let hoveredBar = -1;
+                values.forEach((value, i) => {
+                    const x = xStart + (i * (barWidth + barGap));
+                    const barHeight = Math.abs((value / range) * chartHeight * animationProgress);
+                    let y;
+
+                    if (value >= 0) {
+                        y = canvas.height - 40 - ((value - min) / range) * chartHeight;
+                    } else {
+                        y = canvas.height - 40 - ((0 - min) / range) * chartHeight;
+                    }
+
+                    if (mouseX >= x && mouseX <= x + barWidth && mouseY >= y && mouseY <= y + barHeight) {
+                        hoveredBar = i;
+                    }
+                });
+
+                if (hoveredBar !== -1) {
+                    tooltip.style.opacity = '1';
+                    tooltip.textContent = `${years[hoveredBar]}: ${values[hoveredBar]}억`;
+                    tooltip.style.left = (event.clientX + 15) + 'px';
+                    tooltip.style.top = (event.clientY - 30) + 'px';
+                } else {
+                    tooltip.style.opacity = '0';
+                }
+            });
+
+            canvas.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0';
+            });
+
+            const resizeAndDraw = () => {
+                const parentWidth = chartDiv.offsetWidth;
+                const parentHeight = chartDiv.offsetHeight;
+                canvas.width = parentWidth;
+                canvas.height = parentHeight;
+
+                drawChart(ctx, canvas, key, chartDataMap[key]);
+            };
+
+            window.addEventListener('resize', resizeAndDraw);
+            resizeAndDraw();
+
+            if (animateBars) {
+                animate();
+            }
+        });
+    }
+
+    function init() {
+        document.querySelectorAll('.data-selector').forEach(selector => {
+            selector.addEventListener('change', (event) => {
+                const tabId = event.target.closest('section').id;
+                state.selectedType = event.target.value;
+
+                const tabInfo = dataSources[tabId];
+                renderTable(tabInfo.tableBodyId, tabInfo.data[state.selectedType], tabInfo.highlightRows);
+
+                if (tabInfo.chartData.length > 0) {
+                    setupCharts(tabInfo.data[state.selectedType], tabInfo.chartData, true);
+                }
+            });
+        });
+
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = event.target.getAttribute('href').substring(1);
+
+                tabLinks.forEach(l => l.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                event.target.classList.add('active');
+                document.getElementById(targetId).classList.add('active');
+
+                state.activeTab = targetId;
+                const tabInfo = dataSources[targetId];
+
+                if (tabInfo.selectorId) {
+                    state.selectedType = document.getElementById(tabInfo.selectorId).value;
+                }
+
+                if (tabInfo.tableBodyId) {
+                    renderTable(tabInfo.tableBodyId, tabInfo.data[state.selectedType], tabInfo.highlightRows);
+                }
+
+                if (tabInfo.chartData.length > 0) {
+                    chartSection.style.display = 'flex';
+                    setupCharts(tabInfo.data[state.selectedType], tabInfo.chartData, true);
+                } else {
+                    chartSection.style.display = 'none';
+                    tooltip.style.opacity = '0';
+                }
+            });
+        });
+
+        const initialTab = dataSources[state.activeTab];
+        renderTable(initialTab.tableBodyId, initialTab.data[state.selectedType], initialTab.highlightRows);
+        setupCharts(initialTab.data[state.selectedType], initialTab.chartData, true);
+    }
+
+    const topBtn = document.getElementById("topBtn");
+
+    window.addEventListener("scroll", () => {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 100) {
+            topBtn.classList.add("show");
+        } else {
+            topBtn.classList.remove("show");
+        }
+    });
+
+    topBtn.addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
