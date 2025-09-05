@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artist</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ul,
+    li {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      text-align: center;
+    }
+
+    .main-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .sub-menu {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .sub-menu a {
+      text-decoration: none;
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sub-menu a.active {
+      border-bottom: 2px solid #000;
+    }
+
+    .content-wrapper {
+      position: relative;
+      width: 80%;
+      margin: 0 auto;
+      min-height: 400px;
+    }
+
+    .content-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .content-wrapper .video_list_cont {
+      max-width: 1330px;
+      margin: 0 auto;
+    }
+
+    .content-wrapper .video_list_cont ul {
+      margin-left: 25px;
+      font-size: 0;
+    }
+
+    .content-wrapper .video_list_cont ul li {
+      display: inline-block;
+      width: 33.3%;
+      margin-bottom: 40px;
+      vertical-align: top;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(80px);
+    }
+
+    .content-wrapper .video_list_cont ul li a {
+      display: block;
+      width: calc(100% - 25px);
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_img {
+      position: relative;
+      padding-bottom: 55%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-color: #000;
+      border: 1px solid #E5E8EB;
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_img .video_more {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background-color: #00000082;
+      transition: all 0.2s;
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_img .video_more .more_ico {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 42px;
+      color: white;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_img img {
+      display: block;
+      height: 100%;
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-top: 10px;
+      box-sizing: border-box;
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_info strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+      color: #42474E;
+      font-weight: 700;
+      cursor: default;
+      text-align: left;
+      flex: 1;
+    }
+
+    .content-wrapper .video_list_cont ul li a .video_info p {
+      margin-left: 10px;
+      font-size: 12px;
+      color: #868E9B;
+      font-weight: 400;
+      cursor: default;
+      white-space: nowrap;
+    }
+
+    .content-wrapper .video_list_cont ul li a:hover .video_img .video_more {
+      opacity: 1;
+      transition: all 0.2s;
+    }
+
+    .content-wrapper .video_list_cont ul li.on {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 1s ease-out;
+    }
+
+    .content-wrapper .page_wrap {
+      margin-top: 84px;
+      text-align: center;
+    }
+
+    .content-wrapper .page_wrap a {
+      display: inline-block;
+      width: 34px;
+      height: 34px;
+      padding: 7px;
+      margin-left: 10px;
+      font-size: 14px;
+      color: #42474E;
+      font-weight: 400;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .content-wrapper .page_wrap a:first-child {
+      margin-left: 0;
+    }
+
+    .content-wrapper .page_wrap a.active {
+      background-color: #42474E;
+      color: #fff;
+      border-radius: 50%;
+    }
+
+    .content-wrapper .page_wrap a.btn i {
+      font-size: 14px;
+      color: #42474E;
+      vertical-align: middle;
+    }
+
+    .content-wrapper .page_wrap a.none i {
+      opacity: 0.2;
+    }
+
+    .content-wrapper .page_wrap a:hover i {
+      color: #000;
+    }
+
+    /* 반응형 추가 */
+    @media (max-width: 1024px) {
+      .content-wrapper {
+        width: 90%;
+      }
+
+      .content-wrapper .video_list_cont ul li {
+        width: 50%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .content-wrapper {
+        width: 95%;
+      }
+
+      .content-wrapper .video_list_cont ul li {
+        width: 100%;
+      }
+
+      .content-wrapper .video_list_cont ul li a .video_info strong {
+        font-size: 12px;
+      }
+
+      .content-wrapper .video_list_cont ul li a .video_info p {
+        font-size: 11px;
+      }
+    }
+
+   .video_img {
+  position: relative;
+  overflow: hidden; /* 이미지가 박스를 넘어가지 않도록 */
+}
+
+.video_img::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit; /* 기존 background-image 사용 */
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease; /* 부드럽게 확대 */
+  z-index: 0;
+}
+
+.video_img .video_more {
+  position: relative;
+  z-index: 1; /* 클릭 요소가 위로 */
+}
+
+.video_list_cont ul li a:hover .video_img::before {
+  transform: scale(1.1); /* 10% 확대 */
+}
+  </style>
+</head>
+
+<body>
+  <div class="content-wrapper">
+    <div class="main-title">ARTIST</div>
+
+    <div class="sub-menu">
+      <a href="artist.html">ARTIST</a>
+      <a href="album.html">ALBUM</a>
+      <a href="video.html" class="active">VIDEO</a>
+    </div>
+
+    <!-- video content -->
+    <div class="video_list_cont">
+      <ul>
+        <li class="content on">
+          <a href="https://www.youtube.com/watch?v=gqY9MouewhI" target="_blank" rel="noopener noreferrer">
+            <div class="video_img" style="background-image:url('https://i.ytimg.com/vi/gqY9MouewhI/sddefault.jpg');">
+              <div class="video_more">
+                <i class="bi bi-play more_ico"></i>
+              </div>
+            </div>
+            <div class="video_info">
+              <strong>PLAY List It's All About Love🖤 Addictive indie R&B groove</strong>
+              <p>2025-09-05</p>
+            </div>
+          </a>
+        </li>
+        <li class="content on">
+          <a href="https://www.youtube.com/watch?v=QK0AwxqoXRY" target="_blank" rel="noopener noreferrer">
+            <div class="video_img" style="background-image:url('https://i.ytimg.com/vi/QK0AwxqoXRY/sddefault.jpg');">
+              <div class="video_more">
+                <i class="bi bi-play more_ico"></i>
+              </div>
+            </div>
+            <div class="video_info">
+              <strong>PLAY List 🛀🏻Sink into softness, your healing pop escape</strong>
+              <p>2025-09-05</p>
+            </div>
+          </a>
+        </li>
+        <li class="content on">
+          <a href="https://www.youtube.com/watch?v=BJmvrG95pTs" target="_blank" rel="noopener noreferrer">
+            <div class="video_img" style="background-image:url('https://i.ytimg.com/vi/BJmvrG95pTs/sddefault.jpg');">
+              <div class="video_more">
+                <i class="bi bi-play more_ico"></i>
+              </div>
+            </div>
+            <div class="video_info">
+              <strong>PLAY List 🦦Drifting without a thought</strong>
+              <p>2025-09-05</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+
+      <!-- page 이동 -->
+      <div class="page_wrap">
+        <a href="" class="btn pprev none"><i class="bi bi-chevron-double-left"></i></a>
+        <a href="" class="btn prev"><i class="bi bi-chevron-compact-left"></i></a>
+        <a href="" class="num active">1</a>
+        <a href="" class="num">2</a>
+        <a href="" class="num">3</a>
+        <a href="" class="num">4</a>
+        <a href="" class="num">5</a>
+        <a href="" class="btn next"><i class="bi bi-chevron-compact-right"></i></a>
+        <a href="" class="btn nnext"><i class="bi bi-chevron-double-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const contents = document.querySelectorAll('.content');
+
+      contents.forEach((li, index) => {
+        li.style.opacity = 0;
+        li.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+          li.classList.add('on');
+          li.style.opacity = '';
+          li.style.transform = '';
+        }, index * 150);
+      });
+    });
+
+    
+  </script>
+</body>
+
+</html>

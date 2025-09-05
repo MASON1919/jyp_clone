@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Album</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .sub-menu {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .sub-menu a {
+            text-decoration: none;
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .sub-menu a.active {
+            border-bottom: 2px solid #000;
+        }
+
+        .album-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 80px 10px;
+            padding: 0 20px;
+            justify-content: center;
+        }
+
+        .album-card {
+            width: 350px;
+            /* 카드 가로 길이 */
+            height: 350px;
+            /* 카드 세로 길이 동일하게 */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .album-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .album-img-wrapper {
+            width: 100%;
+            height: 100%;
+            /* 카드 전체를 이미지 wrapper로 사용 */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .album-card img {
+            width: 100%;
+            height: 100%;
+            /* 카드 높이에 맞춰 이미지 확대 */
+            object-fit: cover;
+            /* 이미지 비율 유지하며 잘라서 채우기 */
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .album-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .album-plus {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .album-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .album-card:hover .album-overlay,
+        .album-card:hover .album-plus {
+            opacity: 1;
+        }
+
+        .album-info,
+
+        .album-title {
+            margin-top: 5px;
+        }
+
+        
+        .content-wrapper {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            min-height: 400px;
+        }
+
+        .content-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .content-wrapper .video_list_cont {
+            max-width: 1330px;
+            margin: 0 auto;
+        }
+
+        .content-wrapper .video_list_cont ul {
+            margin-left: 25px;
+            font-size: 0;
+        }
+
+        .content-wrapper .video_list_cont ul li {
+            display: inline-block;
+            width: 33.3%;
+            margin-bottom: 40px;
+            vertical-align: top;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+
+        .content-wrapper .video_list_cont ul li a {
+            display: block;
+            width: calc(100% - 25px);
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_img {
+            position: relative;
+            padding-bottom: 55%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-color: #000;
+            border: 1px solid #E5E8EB;
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_img .video_more {
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background-color: #00000082;
+            transition: all 0.2s;
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_img .video_more .more_ico {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 42px;
+            /* 원래 배경 이미지 크기와 맞춤 */
+            color: white;
+            /* 아이콘 색상 */
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_img img {
+            display: block;
+            height: 100%;
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_info strong {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #42474E;
+            font-weight: 700;
+            cursor: default;
+            text-align: left;
+            flex: 1;
+        }
+
+        .content-wrapper .video_list_cont ul li a .video_info p {
+            margin-left: 10px;
+            font-size: 12px;
+            color: #868E9B;
+            font-weight: 400;
+            cursor: default;
+            white-space: nowrap;
+        }
+
+        .content-wrapper .video_list_cont ul li a:hover .video_img .video_more {
+            opacity: 1;
+            transition: all 0.2s;
+        }
+
+        .content-wrapper .video_list_cont ul li.on {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 1s ease-out;
+        }
+
+        .content-wrapper .page_wrap {
+            margin-top: 84px;
+            text-align: center;
+        }
+
+        .content-wrapper .page_wrap a {
+            display: inline-block;
+            width: 34px;
+            height: 34px;
+            padding: 7px;
+            margin-left: 10px;
+            font-size: 14px;
+            color: #42474E;
+            font-weight: 400;
+            vertical-align: middle;
+            box-sizing: border-box;
+        }
+
+        .content-wrapper .page_wrap a:first-child {
+            margin-left: 0;
+        }
+
+        .content-wrapper .page_wrap a.active {
+            background-color: #42474E;
+            color: #fff;
+            border-radius: 50%;
+        }
+
+        .content-wrapper .page_wrap a.btn i {
+            font-size: 14px;
+            color: #42474E;
+            vertical-align: middle;
+        }
+
+        .content-wrapper .page_wrap a.none i {
+            opacity: 0.2;
+        }
+
+        .content-wrapper .page_wrap a:hover i {
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <div class="main-title">ARTIST</div>
+
+    <div class="sub-menu">
+        <a href="artist.html">ARTIST</a>
+        <a href="album.html" class="active">ALBUM</a>
+        <a href="video.html">VIDEO</a>
+    </div>
+
+    <div class="album-grid">
+        <a href="https://www.jype.com/ko/Artist" target="_blank">
+            <div class="album-card">
+                <div class="album-img-wrapper">
+                    <img src="cover1.jpg" alt="album1">
+                    <div class="album-overlay"></div>
+                    <div class="album-plus">+</div>
+                </div>
+        </a>
+        <div class="album-info">SHenter | 2025-09-01</div>
+        <div class="album-title"><strong>HELLO</strong></div>
+    </div>
+
+    <a href="https://www.jype.com/ko/Artist" target="_blank">
+        <div class="album-card">
+            <div class="album-img-wrapper">
+                <img src="cover2.jpg" alt="album1">
+                <div class="album-overlay"></div>
+                <div class="album-plus">+</div>
+            </div>
+    </a>
+    <div class="album-info">SHenter | 2025-09-01</div>
+    <div class="album-title"><strong>HELLO</strong></div>
+    </div>
+
+    <a href="https://www.jype.com/ko/Artist" target="_blank">
+        <div class="album-card">
+            <div class="album-img-wrapper">
+                <img src="cover3.jpg" alt="album1">
+                <div class="album-overlay"></div>
+                <div class="album-plus">+</div>
+            </div>
+    </a>
+    <div class="album-info">SHenter | 2025-09-01</div>
+    <div class="album-title"><strong>HELLO</strong></div>
+    </div>
+
+    <a href="https://www.jype.com/ko/Artist" target="_blank">
+        <div class="album-card">
+            <div class="album-img-wrapper">
+                <img src="cover4.jpg" alt="album1">
+                <div class="album-overlay"></div>
+                <div class="album-plus">+</div>
+            </div>
+    </a>
+    <div class="album-info">SHenter | 2025-09-01</div>
+    <div class="album-title"><strong>HELLO</strong></div>
+    </div>
+
+    <a href="https://www.jype.com/ko/Artist" target="_blank">
+        <div class="album-card">
+            <div class="album-img-wrapper">
+                <img src="cover5.jpg" alt="album1">
+                <div class="album-overlay"></div>
+                <div class="album-plus">+</div>
+            </div>
+    </a>
+    <div class="album-info">SHenter | 2025-09-01</div>
+    <div class="album-title"><strong>HELLO</strong></div>
+    </div>
+
+    <a href="https://www.jype.com/ko/Artist" target="_blank">
+        <div class="album-card">
+            <div class="album-img-wrapper">
+                <img src="cover6.jpg" alt="album1">
+                <div class="album-overlay"></div>
+                <div class="album-plus">+</div>
+            </div>
+    </a>
+    <div class="album-info">SHenter | 2025-09-01</div>
+    <div class="album-title"><strong>HELLO</strong></div>
+    </div>
+    <!-- 다른 앨범 카드도 동일하게 추가 -->
+    </div>
+     <div class="page_wrap">
+                <a href="" class="btn pprev none"><i class="bi bi-chevron-double-left"></i></a>
+                <a href="" class="btn prev"><i class="bi bi-chevron-compact-left"></i></a>
+                <a href="" class="num active">1</a>
+                <a href="" class="num">2</a>
+                <a href="" class="num">3</a>
+                <a href="" class="num">4</a>
+                <a href="" class="num">5</a>
+                <a href="" class="btn next"><i class="bi bi-chevron-compact-right"></i></a>
+                <a href="" class="btn nnext"><i class="bi bi-chevron-double-right"></i></a>
+            </div>
+            </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.album-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('show');
+                }, index * 100); // 각 카드가 0.1초 간격으로 나타나도록
+            });
+        });
+    </script>
+
+</body>
+
+</html>
