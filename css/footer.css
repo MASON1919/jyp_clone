@@ -1,4 +1,7 @@
 /* ===== 지덕태 Footer (ONLY) ===== */
+footer *{
+  overflow: hidden;
+}
 .site-footer{
   position: static; /* 문서형 기본 */
   background:#0b0b0b; color:#fff; z-index:9999;
@@ -70,5 +73,14 @@
   .footer-right{ order:2; justify-self:stretch; justify-content:space-between; gap:12px 16px; }
   .footer-center{ order:3; justify-self:center; }
   .notice-text{ max-width:60vw; }
+  footer{
+    display: none;
+  }
 }
 /* ===== 지덕태 Footer (END) ===== */
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  footer{
+    display: none;
+  }
+}
