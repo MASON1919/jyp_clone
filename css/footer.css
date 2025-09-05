@@ -1,0 +1,74 @@
+/* ===== 지덕태 Footer (ONLY) ===== */
+.site-footer{
+  position: static; /* 문서형 기본 */
+  background:#0b0b0b; color:#fff; z-index:9999;
+  font-size:13px; line-height:1.2; -webkit-font-smoothing:antialiased;
+}
+.site-footer a{ color:#fff; text-decoration:none; opacity:.9; }
+.site-footer a:hover{ opacity:1; text-decoration:underline; }
+
+.footer-inner{
+  display:grid; grid-template-columns:1fr auto 1fr;
+  align-items:center; gap:16px;
+  padding:14px 24px; border-top:1px solid rgba(255,255,255,.12);
+}
+
+/* 왼쪽(전체 클릭 링크) */
+.footer-left.as-link{ display:flex; align-items:center; gap:12px; }
+.notice-label{ font-weight:700; letter-spacing:.04em; }
+.notice-text{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* 가운데(정책 링크) */
+.footer-center{ justify-self:center; white-space:nowrap; }
+.policy-link{ font-weight:700; }
+.dot{ margin:0 8px; opacity:.5; }
+
+/* 오른쪽(SNS/패밀리/카피) */
+.footer-right{ justify-self:end; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.social{ display:flex; align-items:center; gap:12px; }
+.social a{ width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; opacity:.9; }
+.social a:hover{ opacity:1; }
+.social svg{ width:18px; height:18px; display:block; color:#fff; } /* currentColor=white */
+
+.family{ position:relative; }
+.family > summary{ list-style:none; cursor:pointer; font-weight:700; }
+.family > summary::-webkit-details-marker{ display:none; }
+.family > ul{
+  display:none; position:absolute; right:0; bottom:28px;
+  min-width:180px; padding:10px 12px; border-radius:10px;
+  background:rgba(0,0,0,.88); box-shadow:0 6px 20px rgba(0,0,0,.35);
+}
+.family[open] > ul{ display:block; }
+.family > ul li{ margin:6px 0; }
+.copyright{ opacity:.8; }
+
+/* 홈(영상) 페이지 – 오버레이 변형 */
+.site-footer.is-overlay{
+  position:fixed; left:0; right:0; bottom:0;
+  background:linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,0));
+  border-top:none; pointer-events:auto;
+}
+
+/* 로고 컬럼이 있는 변형(선택 사용) */
+.footer-inner.with-logo{
+  grid-template-columns: auto 1fr auto auto; /* [로고][NOTICE][정책][오른쪽] */
+}
+.footer-logo img{
+  height:20px; display:block; object-fit:contain; opacity:.95;
+}
+.site-footer.is-overlay .footer-logo img{
+  filter: brightness(0) invert(1); /* 오버레이에서 흰색처럼 보이게 */
+}
+
+/* 주소/전화(전 페이지에서 숨김 처리) */
+.corp-info{ display:none !important; }
+
+/* 모바일 */
+@media (max-width:768px){
+  .footer-inner{ grid-template-columns:1fr; row-gap:8px; }
+  .footer-left.as-link{ order:1; flex-wrap:wrap; }
+  .footer-right{ order:2; justify-self:stretch; justify-content:space-between; gap:12px 16px; }
+  .footer-center{ order:3; justify-self:center; }
+  .notice-text{ max-width:60vw; }
+}
+/* ===== 지덕태 Footer (END) ===== */
