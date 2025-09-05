@@ -9,10 +9,11 @@
 body, html {
   width: 100%;
   height: 100%;
-  overflow: hidden; /* 스크롤 제거 */
-  font-family: sans-serif;
+  font-family: 'Arial', sans-serif;
+  scroll-behavior: smooth;
 }
 
+/* Hero Section */
 .hero {
   position: relative;
   width: 100vw;
@@ -26,20 +27,30 @@ body, html {
   height: 100%;
 }
 
-.slides img {
+.slide {
   position: absolute;
-  top: 0; 
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
   transition: opacity 1s ease-in-out;
-  object-fit: cover; /* 화면에 꽉 차게 */
+  z-index: 0;
 }
 
-.slides img.active {
+.slide.active {
   opacity: 1;
   z-index: 1;
+}
+
+.slide video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
 }
 
 .overlay {
@@ -48,11 +59,12 @@ body, html {
   left: 0;
   width: 100%; 
   height: 100%;
-  background: rgba(0,0,0,0.3);
   z-index: 2;
+  pointer-events: none;
 }
 
-.hero-content {
+/* 각 슬라이드별 콘텐츠 */
+.slide-content {
   position: absolute;
   top: 50%; 
   left: 50%;
@@ -60,48 +72,381 @@ body, html {
   color: #fff;
   text-align: center;
   z-index: 3;
+  max-width: 800px;
+  padding: 0 20px;
 }
 
-.hero-content h1 {
-  font-size: 3rem;
+.slide-content h1 {
+  font-size: 3.5rem;
   margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.slide-content p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  line-height: 1.5;
+}
+
+/* CTA 버튼 스타일 */
+.cta-btn {
+  display: inline-block;
+  padding: 15px 30px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  text-shadow: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cta-btn:hover {
+  background: linear-gradient(45deg, #764ba2, #667eea);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
 }
 
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
+  background: rgba(255,255,255,0.2);
   color: #fff;
-  border: none;
-  padding: 10px 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 12px 20px;
   cursor: pointer;
   z-index: 4;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: bold;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .nav-btn:hover {
-  background: rgba(0,0,0,0.8);
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateY(-50%) scale(1.05);
 }
 
 .prev {
-  left: 20px;
+  left: 30px;
 }
 
 .next {
-  right: 20px;
+  right: 30px;
 }
 
-@media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2rem;
+/* 음소거 버튼 */
+.sound-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 12px;
+  cursor: pointer;
+  z-index: 4;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.sound-btn:hover {
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+  transform: scale(1.1);
+}
+
+/* 스크롤 인디케이터 애니메이션 */
+.scroll-indicator {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  text-align: center;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+.scroll-text {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.scroll-arrow {
+  width: 30px;
+  height: 50px;
+  border: 2px solid rgba(255,255,255,0.6);
+  border-radius: 20px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.scroll-arrow-inner {
+  width: 6px;
+  height: 10px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 3px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes scrollBounce {
+  0%, 20% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(15px); }
+  80%, 100% { transform: translateX(-50%) translateY(0); }
+}
+
+/* Detail Sections - 흰색 배경으로 변경 */
+.detail-section {
+  position: fixed;
+  top: 100vh; /* 화면 아래에서 시작 */
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff; /* 흰색 배경으로 변경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  z-index: 50; /* navbar가 보이도록 낮은 z-index */
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+.detail-section.active {
+  transform: translateY(-100vh); /* 위로 슬라이드 */
+}
+
+.detail-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 51;
+}
+
+.detail-content {
+  text-align: center;
+  color: #333333; /* 텍스트 색상을 어두운 색으로 변경 */
+  position: relative;
+  z-index: 52;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: contentSlideUp 0.8s ease-out 0.4s forwards;
+  margin-top: 80px; /* navbar 공간 확보 */
+}
+
+.detail-content h2 {
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  color: #333333; /* 제목 색상 어두운 색으로 변경 */
+  text-shadow: none; /* 그림자 제거 */
+}
+
+.detail-subtitle {
+  font-size: 1.4rem;
+  margin-bottom: 3rem;
+  opacity: 0.8;
+  font-weight: 300;
+  line-height: 1.6;
+  color: #666666; /* 부제목 색상 */
+}
+
+/* 콘텐츠 슬라이드업 애니메이션 */
+@keyframes contentSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 3rem;
+}
+
+.detail-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #e0e0e0; /* 회색 테두리 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 53;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.detail-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: #667eea; /* 호버 시 테두리 색상 변경 */
+}
+
+/* 카드들의 순차적 애니메이션 */
+.detail-section.active .detail-card:nth-child(1) {
+  animation: cardFadeInUp 0.6s ease-out 0.6s forwards;
+}
+
+.detail-section.active .detail-card:nth-child(2) {
+  animation: cardFadeInUp 0.6s ease-out 0.7s forwards;
+}
+
+.detail-section.active .detail-card:nth-child(3) {
+  animation: cardFadeInUp 0.6s ease-out 0.8s forwards;
+}
+
+@keyframes cardFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.detail-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333333; /* 카드 제목 색상 어두운 색으로 변경 */
+}
+
+.detail-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666666; /* 카드 텍스트 색상 회색으로 변경 */
+}
+
+.back-to-hero {
+  background: #667eea;
+  color: white;
+  border: 2px solid #667eea;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 54;
+}
+
+.back-to-hero:hover {
+  background: #764ba2;
+  border-color: #764ba2;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .slide-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .slide-content p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cta-btn {
+    padding: 12px 25px;
+    font-size: 1rem;
+  }
+  
   .nav-btn {
-    padding: 8px 12px;
+    padding: 10px 15px;
     font-size: 0.9rem;
+  }
+  
+  .prev {
+    left: 20px;
+  }
+  
+  .next {
+    right: 20px;
+  }
+  
+  .sound-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+  
+  .scroll-indicator {
+    bottom: 60px;
+  }
+  
+  .detail-section {
+    top: 100vh;
+    padding: 40px 20px;
+  }
+  
+  .detail-content {
+    margin-top: 60px;
+  }
+  
+  .detail-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .detail-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .detail-card {
+    padding: 30px 20px;
   }
 }

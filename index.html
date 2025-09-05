@@ -8,22 +8,70 @@
     <link href="css/navbar.css" rel="stylesheet">
     <link href="css/footer.css" rel="stylesheet">
 </head>
+
 <body>
-
     <header id="header-placeholder" class="header"></header>
-
-    <section class="hero">
+   
+    <!-- 진창훈 - 캐러셀-->
+    <section class="hero" id="hero">
         <div class="slides">
-            <img src="images/main1.jpg" alt="Slide 1" class="active" />
-            <img src="images/main2.jpg" alt="Slide 2" />
-            <img src="images/main3.jpg" alt="Slide 3" />
+            <!-- 첫 번째 동영상 -->
+            <div class="slide active" data-section="brand-section">
+                <video muted loop>
+                    <source src="videos/main1.mp4" type="video/mp4">
+                    <source src="videos/main1.webm" type="video/webm">
+                    동영상을 지원하지 않는 브라우저입니다.
+                </video>
+                <div class="slide-content">
+                    <h1>브랜드의 새로운 시작</h1>
+                    <p>혁신적인 아이디어로 당신의 브랜드를 세상에 알려보세요</p>
+                    <a href="about.html" class="cta-btn">더 알아보기</a>
+                </div>
+            </div>
+
+            <!-- 두 번째 동영상 -->
+            <div class="slide" data-section="solution-section">
+                <video muted loop>
+                    <source src="videos/main2.mp4" type="video/mp4">
+                    <source src="videos/main2.webm" type="video/webm">
+                    동영상을 지원하지 않는 브라우저입니다.
+                </video>
+                <div class="slide-content">
+                    <h1>창의적인 솔루션</h1>
+                    <p>전문가 팀과 함께하는 맞춤형 마케팅 전략</p>
+                    <a href="services.html" class="cta-btn">서비스 보기</a>
+                </div>
+            </div>
+
+            <!-- 세 번째 동영상 -->
+            <div class="slide" data-section="portfolio-section">
+                <video muted loop>
+                    <source src="videos/main3.mp4" type="video/mp4">
+                    <source src="videos/main3.webm" type="video/webm">
+                    동영상을 지원하지 않는 브라우저입니다.
+                </video>
+                <div class="slide-content">
+                    <h1>성공적인 결과</h1>
+                    <p>다양한 성공 사례와 고객 만족도를 확인해보세요</p>
+                    <a href="portfolio.html" class="cta-btn">포트폴리오</a>
+                </div>
+            </div>
         </div>
+        
         <div class="overlay"></div>
-        <div class="hero-content">
-            <h1>당신의 브랜드를 소개하세요</h1>
-        </div>
+        
         <button class="nav-btn prev">PREV</button>
         <button class="nav-btn next">NEXT</button>
+        <!-- 음소거/음소거 해제 버튼 추가 -->
+        <button class="sound-btn" id="soundToggle">🔇</button>
+
+        <!-- 스크롤 애니메이션 -->
+        <div class="scroll-indicator">
+            <div class="scroll-text">마우스를 스크롤해보세요</div>
+            <div class="scroll-arrow">
+                <div class="scroll-arrow-inner"></div>
+            </div>
+        </div>
     </section>
 
     <footer id="footer-placeholder" class="site-footer is-overlay"></footer>
@@ -32,5 +80,94 @@
     <script src="js/navbar.js" type="module"></script>
     <script src="js/footer.js" type="module"></script>
 
+    <!-- 스크롤 시 나타나는 추가 정보 섹션들 -->
+    <!-- 브랜드 섹션 -->
+    <section class="detail-section" id="brand-section">
+        <div class="detail-container">
+            <div class="detail-content">
+                <h2>브랜드 전략의 모든 것</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <div class="card-icon">🎯</div>
+                        <h3>브랜드 포지셔닝</h3>
+                        <p>시장에서의 독특한 위치를 찾아 경쟁력을 확보합니다</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="card-icon">🎨</div>
+                        <h3>비주얼 아이덴티티</h3>
+                        <p>일관된 브랜드 이미지로 고객에게 강한 인상을 남깁니다</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="card-icon">📱</div>
+                        <h3>디지털 마케팅</h3>
+                        <p>온라인 플랫폼을 활용한 효과적인 브랜드 노출</p>
+                    </div>
+                </div>
+                <button class="back-to-hero">돌아가기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 솔루션 섹션 -->
+    <section class="detail-section" id="solution-section">
+        <div class="detail-container">
+            <div class="detail-content">
+                <h2>맞춤형 솔루션</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <div class="card-icon">💡</div>
+                        <h3>전략 컨설팅</h3>
+                        <p>데이터 기반의 전략적 접근으로 비즈니스 성장을 지원합니다</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="card-icon">🚀</div>
+                        <h3>성장 마케팅</h3>
+                        <p>빠른 성장을 위한 혁신적인 마케팅 솔루션을 제공합니다</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="card-icon">📊</div>
+                        <h3>데이터 분석</h3>
+                        <p>정확한 데이터 분석을 통해 최적의 결과를 도출합니다</p>
+                    </div>
+                </div>
+                <button class="back-to-hero">돌아가기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 포트폴리오 섹션 -->
+    <section class="detail-section" id="portfolio-section">
+        <div class="detail-container">
+            <div class="detail-content">
+                <h2>성공 사례</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <div class="card-icon">🏆</div>
+                        <h3>브랜드 리뉴얼</h3>
+                        <p>기존 브랜드의 완전한 변신으로 200% 매출 증가 달성</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="card-icon">📈</div>
+                        <h3>디지털 전환</h3>
+                        <p>전통 기업의 디지털 전환으로 새로운 고객층 확보</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="card-icon">🌟</div>
+                        <h3>글로벌 진출</h3>
+                        <p>로컬 브랜드의 성공적인 해외 시장 진출 지원</p>
+                    </div>
+                </div>
+                <button class="back-to-hero">돌아가기</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 지덕태 - 푸터-->
+    <footer>
+    </footer>
+    <!-- 지덕태 - 푸터-->
+
+    <script src="js/main.js"></script>
+    <script src="js/navbar.js" type="module"></script>
 </body>
 </html>
