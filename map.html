@@ -1,1 +1,705 @@
-<!--김영준 - 지도-->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JYP CONTACT</title>
+
+    <style>
+   /* 기본 스타일 및 여백 제거 */
+body, h1, h2, h3, p, ul, li, section, div, table, form, input, textarea, button, select {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* 링크 스타일 초기화 */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 헤더 (메뉴바) 스타일 */
+header {
+    text-align: center;
+    padding: 50px 0 20px;
+    position: fixed; /* 헤더 고정 */
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    font-size: 13px;
+    transition: all 0.3s ease-in-out;
+}
+
+header nav ul li a.active {
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+}
+
+/* 메인 콘텐츠 스타일 - 헤더 높이만큼 여백 추가 */
+main {
+    padding: 50px 20px;
+    padding-top: 150px; /* 헤더 고정 위치 고려 */
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 각 섹션 공통 스타일 */
+section {
+    padding: 50px 0;
+    border-bottom: 1px solid #eee;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* JYP CONTACT 섹션 */
+#contact-header {
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+#contact-header h2 {
+    font-size: 2.2em;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+/* 주소 및 연락처 섹션 */
+.address-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 50px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.address-title {
+    font-weight: bold;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    flex-basis: 25%;
+}
+
+.address-content {
+    flex-grow: 1;
+}
+
+.address-content p {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.5;
+}
+
+.phone-number {
+    font-size: 0.9em;
+    color: #666;
+    white-space: nowrap;
+}
+
+/* 글로벌 지사 섹션 */
+.global-section h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.global-branch {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.global-branch-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.global-branch-title {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.global-branch-address {
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.global-branch-phones p {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.5;
+    text-align: right;
+}
+
+
+/* 지도 섹션에만 너비 확장 스타일 적용 */
+#location-map {
+    padding: 50px 0;
+    text-align: center;
+    max-width: 100vw; /* 화면 전체 너비로 확장 */
+    width: 100vw; /* 화면 전체 너비로 확장 */
+    margin: 0 calc(50% - 50vw); /* 가운데 정렬을 위한 마진 계산 */
+}
+
+#location-map img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+
+/* 문의 폼 섹션 */
+#inquiry-form {
+    padding: 50px 0;
+}
+
+#inquiry-form h2, #inquiry-form p {
+    text-align: center;
+}
+
+form div {
+    margin-bottom: 25px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+input[type="text"], input[type="email"], textarea, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+textarea {
+    resize: vertical;
+    height: 150px;
+}
+
+.email-container {
+    display: flex;
+    gap: 10px;
+}
+
+.email-container input {
+    flex-grow: 1;
+}
+
+/* 이메일 인증 버튼 스타일 */
+.email-container button {
+    padding: 12px 20px;
+    border: 1px solid #ddd;
+    background-color: #f7f7f7;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* 동의서 섹션 */
+.agreement-container {
+    margin-top: 30px;
+}
+
+.agreement-table {
+    border: 1px solid #ddd;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+table th {
+    background-color: #f7f7f7;
+}
+
+/* 개인정보 동의 부분 수정 */
+.agreement-text-small {
+    font-size: 0.8em;
+    color: #666;
+    margin: 10px 0;
+    text-align: left;
+    padding: 0 12px;
+}
+
+.agreement-check-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    padding-right: 12px;
+}
+
+.agreement-check-wrapper label {
+    font-weight: normal;
+    font-size: 0.8em;
+    margin-bottom: 0;
+    color: #666;
+}
+
+.agreement-check-wrapper input[type="checkbox"] {
+    width: auto;
+    border: 1px solid #ccc;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    margin: 40px auto 0;
+    background-color: #1a1a1a;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px 0;
+    cursor: pointer;
+}
+
+/* Footer 스타일 */
+footer {
+    padding: 30px 20px;
+    background-color: #f7f7f7;
+    font-size: 12px;
+    color: #888;
+}
+
+.footer-container {
+    max-width: none;
+    margin: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.copyright {
+    margin: 0;
+}
+
+/* TOP 버튼 스타일 */
+.btn-top {
+    position: fixed;
+    right: 30px;
+    bottom: 70px;
+    z-index: 999;
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 1.2;
+    font-size: 10px;
+    color: #333;
+    display: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-top span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-weight: bold;
+}
+
+/* 스크롤 시 헤더 스타일 변경 */
+header.scrolled {
+    padding: 10px 0;
+    transition: all 0.3s ease-in-out;
+}
+
+header.scrolled h1 {
+    display: none;
+}
+
+header.scrolled nav {
+    width: 100%; /* 너비 100%로 설정 */
+}
+
+header.scrolled nav ul {
+    justify-content: center;
+}
+
+header.scrolled nav ul li:not(:last-child) {
+    display: none;
+}
+
+header.scrolled nav ul li:last-child a.active {
+    font-size: 14px;
+    font-weight: bold;
+    /* 스크롤 시 밑줄 제거 */
+    border-bottom: none;
+}
+
+/* 미디어 쿼리 - 태블릿 */
+@media (max-width: 768px) {
+    header {
+        padding: 30px 0 15px;
+    }
+
+    header nav ul {
+        flex-wrap: wrap;
+        gap: 20px;
+        font-size: 12px;
+    }
+
+    main {
+        padding: 30px 15px;
+        padding-top: 150px;
+    }
+
+    h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .address-section {
+        flex-direction: column;
+    }
+
+    .global-branch {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .global-branch-phones p {
+        text-align: left;
+    }
+
+    header.scrolled nav ul li:last-child {
+        padding-right: 30px;
+    }
+}
+
+/* 미디어 쿼리 - 모바일 */
+@media (max-width: 480px) {
+    header {
+        padding: 20px 0 10px;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    main {
+        padding: 20px 10px;
+        padding-top: 100px;
+    }
+    
+    .email-container {
+        flex-direction: column;
+    }
+
+    .email-container button {
+        width: 100%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+    
+    .agreement-text-small {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+    }
+
+    .agreement-text-small span {
+        text-align: right;
+    }
+}
+    </style>
+    <link href="css/navbar.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header-placeholder" class="header"></header>
+    <header>
+        <h1>JYP</h1>
+        <nav>
+            <ul>
+                <li><a href="#">ABOUT JYP</a></li>
+                <li><a href="#">HISTORY</a></li>
+                <li><a href="#">NOTICE</a></li>
+                <li><a href="#" class="active">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+    
+
+        <section class="address-section">
+            <h3 class="address-title">JYP CENTER</h3>
+            <div class="address-content">
+                <p>서울특별시 강동구 강동대로 205 (성내동, JYP Center) 우) 05407</p>
+                <p>205, Gangdong daero, Gangdong-gu, Seoul, Republic of Korea</p>
+            </div>
+            <div class="phone-number">
+                <p>02-2225-8100</p>
+            </div>
+        </section>
+
+        <section class="address-section">
+            <h3 class="address-title">JYP TRAINING CENTER</h3>
+            <div class="address-content">
+                <p>서울특별시 강동구 성내로 17 (성내동, JYP Training Center) 우) 05392</p>
+                <p>17, Seongnae-ro, Gangdong-gu, Seoul, Republic of Korea</p>
+            </div>
+            <div class="phone-number">
+                </div>
+        </section>
+
+        <section id="location-map">
+            <a href="https://www.google.co.kr/maps/place/JYP+ENTERTAINMENT/data=!4m5!3m4!1s0x357ca47a55555555:0x83f404863f3fb36a!8m2!3d37.5240837!4d127.1291074?hl=ko">
+                <img src="images/jypmap.png" alt="JYP 센터와 트레이닝 센터 위치 지도">
+            </a>
+        </section>
+
+        <section class="global-section">
+            <h2>GLOBAL JYP</h2>
+            
+            <div class="global-branch">
+                <div class="global-branch-info">
+                    <h3 class="global-branch-title">JAPAN (TOKYO)</h3>
+                    <div class="global-branch-address">
+                        <p>Japan Seven Minami-aoyama Building 5F,</p>
+                        <p>4-1-6 Minami-aoyama, Minato-ku. Tokyo 107-0062 Japan</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="global-branch">
+                <div class="global-branch-info">
+                    <h3 class="global-branch-title">CHINA (BEIJING)</h3>
+                    <div class="global-branch-address">
+                        <p>China C11-106, Zhengdong Group Corp. Yard,</p>
+                        <p>No.4 Jiu Xianqiao Street, Chaoyang District, Beijing 100102, China</p>
+                    </div>
+                </div>
+                <div class="global-branch-phones">
+                    <p>+86-10-8459-9463</p>
+                    <p>+86-10-8459-9289</p>
+                    <p>+86-10-8459-9290</p>
+                </div>
+            </div>
+
+            <div class="global-branch">
+                <div class="global-branch-info">
+                    <h3 class="global-branch-title">USA (LOS ANGELES)</h3>
+                    <div class="global-branch-address">
+                        </div>
+                </div>
+                <div class="global-branch-phones">
+                    <p>+213-723-2340</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="inquiry-form">
+            <h2>INQUIRY</h2>
+            <p>문의하신 내용 확인 후 필요시 담당자가 개별 연락 드리도록 하겠습니다.</p>
+
+            <form action="#" method="POST">
+                <div>
+                    <label for="inquiry-type">유형 *</label>
+                    <select id="inquiry-type" name="inquiry-type">
+                        <option value="">선택</option>
+                        <option value="광고 문의">광고 문의</option>
+                        <option value="사업제휴">사업제휴</option>
+                        <option value="파트너 의견 청취">파트너 의견 청취</option>
+                        <option value="기업 윤리 신고">기업 윤리 신고</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="name">이름 *</label>
+                    <input type="text" id="name" name="name" placeholder="이름을 입력해 주세요.">
+                </div>
+                <div>
+                    <label for="contact">연락처</label>
+                    <input type="text" id="contact" name="contact" placeholder="연락처를 입력해 주세요.">
+                </div>
+                <div>
+                    <label for="email">이메일 *</label>
+                    <div class="email-container">
+                        <input type="email" id="email" name="email" placeholder="이메일 주소를 입력해 주세요.">
+                        <button type="button">이메일 인증</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="message">문의내용 *</label>
+                    <textarea id="message" name="message" rows="10" placeholder="문의 내용을 입력해 주세요."></textarea>
+                </div>
+
+                <section class="agreement-container">
+                    <h3>개인정보 수집·이용 동의 *</h3>
+                    <div class="agreement-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>수집·이용 항목</th>
+                                    <th>수집·이용 목적</th>
+                                    <th>보유기간</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>이름, 이메일</td>
+                                    <td>사이트 이용 및 서비스 제공, 문의 제보 대응</td>
+                                    <td>서비스 제공, 문의, 제보 내용: 12개월</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="agreement-text-small">
+                            개인정보 수집 및 이용에 대한 동의를 거부할 수 있으며, 동의를 거부할 경우 사이트 이용 및 서비스 제공에 제한을 받을 수 있습니다.
+                            <div class="agreement-check-wrapper">
+                                <input type="checkbox" id="agree-name-email" name="agree-name-email">
+                                <label for="agree-name-email">동의합니다.</label>
+                            </div>
+                        </p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>수집·이용 항목</th>
+                                    <th>수집·이용 목적</th>
+                                    <th>보유기간</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>연락처</td>
+                                    <td>사이트 이용 및 서비스 제공, 문의 제보 대응</td>
+                                    <td>서비스 제공, 문의, 제보 내용: 12개월</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="agreement-text-small">
+                            개인정보 수집 및 이용에 대한 동의를 거부할 수 있으며, 동의를 거부할 경우 사이트 이용 및 서비스 제공에 제한을 받을 수 있습니다.
+                            <div class="agreement-check-wrapper">
+                                <input type="checkbox" id="agree-contact" name="agree-contact">
+                                <label for="agree-contact">동의합니다.</label>
+                            </div>
+                        </p>
+                    </div>
+                </section>
+
+                <button type="submit" class="submit-button">등록</button>
+
+            </form>
+        </section>
+
+</a>
+    </main>
+    <footer>
+        <div class="footer-container">
+            <a href="#">개인정보처리방침</a>
+            <p class="copyright">© JYP ENTERTAINMENT Corp.</p>
+        </div>
+    </footer>
+
+<a href="#" class="btn-top">
+    <span>&uarr;<br>TOP</span>
+</a>
+
+    <script>
+    const btnTop = document.querySelector('.btn-top');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+            btnTop.style.display = 'block';
+        } else {
+            btnTop.style.display = 'none';
+        }
+    });
+
+    // 클릭 시 맨 위로 스크롤
+    btnTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    //스크롤 아래로 내릴 시 네비 바 contact만 표시
+    const header = document.querySelector('header');
+    const nav = document.querySelector('header nav');
+    const mainTitle = document.querySelector('header h1');
+    
+    // 스크롤 위치에 따라 클래스 추가/제거
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 250) { // 스크롤이 250px 이상 내려갔을 때
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    </script>
+    <title>Map</title>
+    <link href="css/navbar.css" rel="stylesheet">
+</head>
+<script src="js/navbar.js" type="module"></script>
+
+</html>

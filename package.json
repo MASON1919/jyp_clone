@@ -1,0 +1,21 @@
+{
+  "name": "shentertainment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MASON1919/jyp_clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MASON1919/jyp_clone/issues"
+  },
+  "homepage": "https://github.com/MASON1919/jyp_clone#readme",
+  "description": "",
+  "type": "module"
+}

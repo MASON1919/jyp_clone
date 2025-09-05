@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>개인정보처리방침 | 클론</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* notice 페이지와 동일 톤 */
+    body{background:#fff;color:#111;}
+    .site-wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px;}
+    .mini-header{display:flex;align-items:center;justify-content:center;gap:28px;margin:6px 0 22px;}
+    .brand{font-weight:800;letter-spacing:.08em;}
+    .gnb{display:flex;gap:18px;font-size:12px}
+    .gnb a{color:#111;text-decoration:none}
+    .gnb a.active{font-weight:700;text-decoration:underline}
+
+    .title-row{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid #ddd;padding-bottom:8px;margin-bottom:18px}
+    .title{font-size:18px;font-weight:700}
+    .date{font-size:12px;color:#7a7a7a}
+
+    .section-title{margin:18px 0 6px;font-weight:700}
+    .badge{display:inline-block;vertical-align:middle;margin-left:6px;width:16px;height:16px;border-radius:50%;background:#e9f5ff;border:1px solid #9dd0ff;position:relative}
+    .badge::after{content:"i";position:absolute;left:50%;top:50%;transform:translate(-50%,-55%);font-size:11px;color:#2b7bdc;font-weight:700}
+    .muted{color:#6b6b6b}
+
+    table{width:100%;border-collapse:collapse;margin:10px 0 14px}
+    th,td{border:1px solid #e5e5e5;padding:10px;vertical-align:top}
+    th{background:#f7f8fa;font-weight:600}
+    .hr{height:1px;background:#e5e5e5;margin:22px 0}
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <!-- 상단 심플 헤더 -->
+    <div class="mini-header">
+      <div class="brand">CLONE</div>
+      <nav class="gnb" aria-label="global">
+        <a href="about.html">ABOUT CLONE</a>
+        <a href="history.html">HISTORY</a>
+        <a href="notice.html">NOTICE</a>
+        <a class="active" href="privacy.html">PRIVACY</a>
+      </nav>
+    </div>
+
+    <!-- 타이틀/시행일 -->
+    <div class="title-row">
+      <h1 class="title">개인정보처리방침</h1>
+      <time class="date" datetime="2025-09-05">시행일: 2025-09-05</time>
+    </div>
+
+    <!-- 인트로 -->
+    <p class="muted">클론엔터테인먼트(이하 “회사”)는 이용자의 개인정보를 관련 법령에 따라 안전하게 보호합니다. 본 방침은 개인정보의 수집·이용 목적, 보유기간, 보호조치 등을 설명합니다.</p>
+
+    <div class="hr"></div>
+
+    <!-- 1. 수집 항목 -->
+    <h3 class="section-title">1. 수집하는 개인정보 <span class="badge" aria-hidden="true"></span></h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%">분류</th>
+          <th>수집 항목</th>
+          <th style="width:26%">수집 목적</th>
+          <th style="width:18%">보유 기간</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>회원가입(필수)</td>
+          <td>이름, 이메일, 비밀번호, 닉네임</td>
+          <td>회원 식별, 서비스 제공 및 공지</td>
+          <td>탈퇴 시 즉시 파기</td>
+        </tr>
+        <tr>
+          <td>고객문의(필수)</td>
+          <td>이름, 연락처(이메일/전화), 문의내용</td>
+          <td>문의 확인 및 답변</td>
+          <td>처리 완료 후 3년</td>
+        </tr>
+        <tr>
+          <td>마케팅(선택)</td>
+          <td>이메일, 푸시 토큰</td>
+          <td>이벤트/프로모션 안내</td>
+          <td>동의 철회 시</td>
+        </tr>
+        <tr>
+          <td>자동수집</td>
+          <td>쿠키, 접속기기/브라우저 정보, IP, 이용기록</td>
+          <td>보안/통계, 서비스 품질 개선</td>
+          <td>수집일로부터 6개월</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted">※ 수집 방법: 회원가입, 문의하기, 이벤트 응모, 서비스 이용 과정(쿠키 등 자동수집)</p>
+
+    <!-- 2. 이용 목적 -->
+    <h3 class="section-title">2. 개인정보의 이용 목적</h3>
+    <ul>
+      <li>회원관리, 본인확인, 부정이용 방지</li>
+      <li>서비스 제공 및 계약 이행, 요금정산</li>
+      <li>공지·민원처리, 서비스 개선 및 통계</li>
+      <li>(선택 동의 시) 이벤트·광고성 정보 전송</li>
+    </ul>
+
+    <!-- 3. 보유기간 -->
+    <h3 class="section-title">3. 보유 및 이용기간</h3>
+    <table>
+      <thead>
+        <tr><th>항목/기록</th><th>보존 근거</th><th>기간</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>계약·결제·재화공급 기록</td><td>전자상거래법</td><td>5년</td></tr>
+        <tr><td>소비자 불만·분쟁 처리 기록</td><td>전자상거래법</td><td>3년</td></tr>
+        <tr><td>표시·광고 기록</td><td>전자상거래법</td><td>6개월</td></tr>
+        <tr><td>접속 로그(IP 등)</td><td>통신비밀보호법</td><td>3개월</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 4. 제3자 제공 -->
+    <h3 class="section-title">4. 제3자 제공</h3>
+    <p>회사는 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다. 다만, 법령에 근거하거나 이용자의 별도 동의를 받은 경우에 한해 최소한으로 제공합니다.</p>
+
+    <!-- 5. 처리위탁 -->
+    <h3 class="section-title">5. 개인정보 처리의 위탁</h3>
+    <p>서비스 운영의 효율성을 위해 다음과 같이 처리업무를 위탁할 수 있습니다.</p>
+    <table>
+      <thead>
+        <tr><th style="width:40%">수탁자</th><th>위탁업무 내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>블루웨이브</td><td>FANS 커뮤니티 운영</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead>
+        <tr><th style="width:40%">재위탁업체(수탁업체)</th><th>위탁업무 내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>뉴네틱스</td><td>결제 CS 문의 및 환불 처리</td></tr>
+        <tr><td>h-메일</td><td>알림/공지 메일 발송 대행</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 6. 권리 -->
+    <h3 class="section-title">6. 이용자의 권리</h3>
+    <ul>
+      <li>개인정보 열람·정정·삭제·처리정지 요구</li>
+      <li>만 14세 미만은 법정대리인 권리 행사 가능</li>
+      <li>권리 행사는 “개인정보 보호책임자”를 통해 요청</li>
+    </ul>
+
+    <!-- 7. 쿠키 -->
+    <h3 class="section-title">7. 쿠키(Cookie) 운영 및 거부</h3>
+    <p>맞춤형 서비스 제공을 위해 쿠키를 사용합니다. 브라우저 설정에서 쿠키 저장을 거부하거나 삭제할 수 있으며, 거부 시 일부 기능이 제한될 수 있습니다.</p>
+
+    <!-- 8. 안전조치 -->
+    <h3 class="section-title">8. 개인정보의 안전성 확보조치</h3>
+    <ul>
+      <li>관리적 조치: 내부관리계획 수립, 임직원 교육</li>
+      <li>기술적 조치: 접근권한 관리, 암호화, 접근통제, 보안프로그램</li>
+      <li>물리적 조치: 전산실·자료보관실 접근통제</li>
+    </ul>
+
+    <!-- 9. 책임자 -->
+    <h3 class="section-title">9. 개인정보 보호책임자</h3>
+    <p>
+      성명: [담당자명] / 직책: [직책]<br />
+      이메일: [email@example.com] / 연락처: [전화번호]
+    </p>
+
+    <!-- 10. 고지/개정 -->
+    <h3 class="section-title">10. 고지의 의무 및 개정</h3>
+    <p>본 방침은 법령 및 서비스 변경에 따라 개정될 수 있으며, 개정 시 시행 7일 전부터 <a href="notice.html">NOTICE</a>에 공지합니다.</p>
+
+    <div class="hr"></div>
+    <p class="muted">최종개정: 2025-08-29</p>
+  </div>
+
+<!-- ===== 지덕태 Footer (ONLY) ===== -->
+
+<footer class="site-footer is-overlay">
+  <div class="footer-inner">
+    <!-- NOTICE: 전체 클릭 -->
+    <a href="notice.html" class="footer-left as-link">
+      <span class="notice-label">NOTICE</span>
+      <time datetime="2025-08-29">2025.08.29</time>
+      <span class="notice-text">개인정보처리방침 변경 안내</span>
+    </a>
+
+    <!-- 정책 링크 -->
+    <div class="footer-center">
+      <a href="privacy.html" class="policy-link">개인정보처리방침</a>
+      <span class="dot" aria-hidden="true">·</span>
+      <a href="terms.html" class="policy-link">이용약관</a>
+    </div>
+
+    <!-- 우측: SNS + FAMILY + 카피 -->
+    <div class="footer-right">
+      <nav class="social" aria-label="social media">
+        <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="currentColor" opacity="0.18"/>
+            <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/>
+          </svg>
+        </a>
+        <a href="https://facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.18"/>
+            <path d="M13.4 8.5h1.8V6h-1.8c-2 0-3.3 1.2-3.3 3.2V11H8.6v2.3h1.5V18h2.5v-4.7h2l.4-2.3h-2.4v-1.5c0-.9.4-1.5 1.4-1.5Z" fill="currentColor"/>
+          </svg>
+        </a>
+        <a href="https://x.com/" target="_blank" rel="noopener" aria-label="X (Twitter)">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="7" width="18" height="10" rx="3" ry="3" fill="currentColor" opacity="0.18"/>
+            <polygon points="10,9 16,12 10,15" fill="currentColor"/>
+          </svg>
+        </a>
+      </nav>
+
+      <details class="family">
+        <summary>FAMILY</summary>
+        <ul>
+          <li><a href="#">CLONE ENT.</a></li>
+          <li><a href="#">STUDIO C</a></li>
+          <li><a href="#">CLONE PUBLISHING</a></li>
+        </ul>
+      </details>
+
+      <span class="copyright">© CLONE ENTERTAINMENT Corp.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- 지덕태 Footer (END) -->
+</body>
+</html>

@@ -1,1 +1,505 @@
 <!--문태웅 - 소개페이지-->
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link href="css/navbar.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header-placeholder" class="header"></header>
+    <script src="js/navbar.js" type="module"></script>
+</body>
+
+
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        ul,
+        li {
+            list-style: none;
+        }
+
+        a {
+            color: #101010;
+            text-decoration: none;
+            outline: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a:active,
+        a:hover {
+            text-decoration: none;
+        }
+
+        .content_wrap {
+            padding: 126px 62px 130px;
+        }
+
+        .content_wrap .content_tit {
+            margin-bottom: 90px;
+            text-align: center;
+        }
+
+        .content_wrap .content_tit strong {
+            display: block;
+            position: relative;
+            font-size: 30px;
+            color: #5fffa2;
+            font-weight: 900;
+        }
+
+        .content_wrap .content_tit .cont_list_btn {
+            overflow-x: auto;
+            display: inline-block;
+            width: 100%;
+            padding: 0 15px;
+            margin-top: 10px;
+            white-space: nowrap;
+            box-sizing: border-box;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .content_wrap .content_tit .cont_list_btn li {
+            display: inline-block;
+            margin-left: 36px;
+        }
+
+        .content_wrap .content_tit .cont_list_btn li a {
+            font-size: 14px;
+            color: #42474E;
+            font-weight: 700;
+        }
+
+        .content_wrap .content_tit .cont_list_btn li a.active {
+            color: #21252c;
+            font-weight: 900;
+            border-bottom: 1px solid #21252c;
+        }
+
+        .content_wrap .content_tit .cont_list_btn li:first-child {
+            margin-left: 0;
+        }
+
+        .content_wrap .content_tit .cont_list_btn::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 네비게이션 */
+
+        .about_wrap {
+            padding-bottom: 50px;
+        }
+
+        .about_wrap .about_cont {
+            position: relative;
+            max-width: 1920px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap {
+            position: relative;
+            padding: 0 236px 0 740px;
+            box-sizing: border-box;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_side {
+            position: absolute;
+            top: 50px;
+            left: 62px;
+            z-index: 6;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_side .about_side_txt {
+            width: 12px;
+            height: 134px;
+            text-indent: -9999px;
+            background: url("images/leader.png") no-repeat center;
+            background-size: 12px 134px;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_side.tp1 {
+            left: auto;
+            right: 62px;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .about_txt_wrap p {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: #21252C;
+            font-weight: 500;
+            line-height: 1.8;
+            word-break: keep-all;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(80px);
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .about_txt_wrap p strong {
+            font-weight: 900;
+            font-size: 24px;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .about_txt_wrap p:first-child {
+            margin-top: 0;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .about_txt_wrap.on p {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 1s ease-out;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .about_txt_wrap.on p.on_delay.tp2 {
+            transition-delay: 0.2s;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .about_txt_wrap.on p.on_delay.tp3 {
+            transition-delay: 0.4s;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap {
+            margin-top: 120px;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_btn {
+            display: inline-block;
+            padding: 10px 20px 9px;
+            margin: 0 auto;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            color: #42474e;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_item {
+            margin-top: 34px;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_item p,
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_item ul li {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #69727e;
+            font-weight: 400;
+            line-height: 2;
+            word-break: keep-all;
+        }
+
+        .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_item p a {
+            color: #009be6;
+            text-decoration: underline;
+        }
+
+        /* 영상 마스킹 */
+        .about_wrap .about_cont .video {
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            left: 236px;
+            z-index: 2;
+            width: 413px;
+            height: 235px;
+            font-size: 0;
+        }
+
+        .about_wrap .about_cont .video .about_sh_img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 5;
+            width: 416px;
+            height: 243px;
+            transform: translate(-50%, -50%);
+            font-size: 0;
+        }
+
+        .about_wrap .about_cont .video .about_sh_img img {
+            width: 100%;
+        }
+
+        .about_wrap .about_cont .video .video_frame {
+            width: 100%;
+            height: 100%;
+            background-color: #5fffa2;
+        }
+
+        .about_wrap .about_cont .video .video_frame video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-size: cover;
+            opacity: 0.6;
+        }
+
+        @media screen and (min-width: 1921px) {
+            .about_wrap .about_cont .about_bg_wrap .about_bg_side {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 1636px) {
+            .about_wrap .about_cont {
+                position: relative;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap {
+                padding: 0 136px 0 488px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .video {
+                top: 0;
+                left: 136px;
+                width: 313px;
+                height: 180px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .video .about_sh_img {
+                width: 315px;
+                height: 183px;
+            }
+        }
+
+        @media screen and (max-width: 1404px) {
+            .about_wrap .about_cont {
+                position: relative;
+                max-width: 658px;
+                margin: 0 auto;
+                padding: 0;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap {
+                position: relative;
+                display: block;
+                padding: 0;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .video {
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 360px;
+                height: 210px;
+                margin: 0 auto 42px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .video .about_sh_img {
+                width: 369px;
+                height: 215px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_side {
+                display: none;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont {
+                padding-left: 0;
+                text-align: center;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont p {
+                margin-top: 0;
+                font-size: 14px;
+                text-align: left;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont p strong {
+                font-size: 18px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont p:first-child {
+                margin-top: 0;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont {
+                text-align: left;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_btn {
+                margin: 0;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_item p,
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont .logo_down_wrap .logo_down_cont .logo_down_item ul li {
+                text-align: left;
+            }
+        }
+
+        @media screen and (max-width: 640px) {
+            .about_wrap {
+                padding: 94px 15px 80px;
+            }
+
+            .about_wrap .content_tit {
+                padding-bottom: 0;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .video {
+                width: 250px;
+                height: 145px;
+                margin: 0 auto 60px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .video .about_sh_img {
+                width: 254px;
+                height: 147px;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont {
+                text-align: left;
+            }
+
+            .about_wrap .about_cont .about_bg_wrap .about_bg_cont p {
+                margin-top: 0;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content_wrap about_wrap">
+        <div class="content_tit">
+            <strong>SH Ent</strong>
+            <!-- content 네비게이션 -->
+            <ul class="cont_list_btn">
+                <li><a href="" class="active">ABOUT SH</a></li>
+                <li><a href="">HISTORY</a></li>
+                <li><a href="">NOTICE</a></li>
+                <li><a href="">CONTACT</a></li>
+            </ul>
+        </div>
+
+        <div class="about_cont">
+            <div class="about_bg_wrap">
+
+                <!-- 양쪽 사이드 작은 글씨 -->
+                <div class="about_bg_side">
+                    <p class="about_side_txt">LEADER IN ENTERTAINMENT</p>
+                </div>
+
+
+                <div id="aboutVideo" class="video">
+                    <!-- 마스킹할 로고 -->
+                    <div class="about_sh_img">
+                        <img src="images/sh_logo.png" alt="sh_video_logo">
+                    </div>
+                    <!-- 마스킹될 영상 -->
+                    <div class="video_frame">
+                        <video playsinline muted loop autoplay preload="metadata">
+                            <source src="images/video.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <!-- 메인 소개 -->
+                <div class="about_bg_cont">
+                    <div class="about_txt_wrap on">
+                        <!-- 메인 위쪽 컨텐츠 -->
+                        <p class="on_delay tp1">
+                            <strong>Leader In Development</strong>
+                            <br>
+                            우리 개발자 커뮤니티가 추구해 온 가치이자 목표입니다.
+                            <br>
+                            우리는 이를 모토로 소프트웨어 산업의 변화를 선도하는 개발자 그룹이 되기 위해 최선을 다해왔습니다.
+                            <br>
+                            <br>
+                        </p>
+                        <p class="on_delay tp2">
+                            우리 커뮤니티는 전 세계 다양한 개발자를 포함해, 국내에서는 Alice, Bob, Charlie, Dana, Eve를, 일본에서는 Haruto, Yui, Riku를,
+                            중국에서는 Li Wei, Chen Yu를, 미국에서는 Sam, Maya에 이르기까지 글로벌을 대표하는 뛰어난 개발자를 배출했습니다.
+                            <br>
+                            <br>
+                            활동 영역에서는 글로벌 오픈소스 프로젝트, 해외 개발 커뮤니티, 스타트업 협업을 통해 전 세계 개발자들과 소통하며 소프트웨어 혁신과 영향력 확대를 선도해왔습니다.
+                            뿐만 아니라 자체 플랫폼을 운영하여 IP 관련 프로젝트, 라이브러리 공유, 협업 도구 개발 등 다양한 기술 사업을 전개하고 있습니다.
+                            <br>
+                            <br>
+                            더불어 우리는 창의적이고 능동적인 개발자를 발굴하고 양성하며, 선도하는 커뮤니티(Leading Community), 존경받는 커뮤니티(Respected
+                            Community)라는 핵심 가치 아래 **‘Leader In Development’**의 가치와 목표를 실현하고 있습니다.
+                            <br>
+                            <br>
+                        </p>
+                        <p class="on_delay tp3">
+                            우리 커뮤니티는 활동 내역을 투명하게 공개하며 코딩 윤리, 오픈소스 라이선스, 커뮤니티 규범을 준수합니다. 이를 통해 소프트웨어 산업의 리더로서 책임과 의무를
+                            다하고, 신뢰받는 개발자 그룹으로 성장할 수 있도록 노력하겠습니다.
+                        </p>
+                    </div>
+
+                    <!-- 메인 아래쪽 컨텐츠 -->
+                    <div class="logo_down_wrap">
+                        <div class="logo_down_cont">
+                            <a href="" class="logo_down_btn">
+                                LOGO DOWNLOAD <i class="bi bi-download"></i>
+                            </a>
+                            <div class="logo_down_item">
+                                <p>
+                                    이 페이지에서 제공되는 OurDev 커뮤니티의 CI(Community Identity) 아이콘 디자인은 저작권법 및 상표법 등 관련 법령의 보호를 받는
+                                    당사 고유의 지식재산입니다. 이를 다운로드·사용하실 경우 아래 사항을 준수해 주시기 바랍니다.
+                                </p>
+                                <ul>
+                                    <li>- 본 아이콘 디자인은 원형 그대로 사용하여야 하며, 색상 및 비율 변경, 요소 추가·삭제, 왜곡, 변형 등 일체의 수정은 금지됩니다.</li>
+                                    <li>- 이 페이지에서 제공되는 최신 버전의 아이콘 디자인만 사용하여야 하며, 과거 버전의 사용은 지양해 주시기 바랍니다.</li>
+                                    <li>- 커뮤니티 또는 개발자의 명예를 훼손하거나, 성적 콘텐츠·혐오 표현·특정인 비방 등 사회 통념상 부적절한 콘텐츠에 사용하는 행위는 금지됩니다.
+                                    </li>
+                                    <li>- 커뮤니티의 별도 사전 승인 없이 상업적 목적으로 사용하는 행위는 금지됩니다.</li>
+                                </ul>
+                                <p>
+                                    상기 원칙을 위반하여 아이콘 디자인을 무단 사용·변형·배포할 경우, 관련 법령에 따라 민·형사상 책임이 발생할 수 있음을 알려드립니다.
+                                    <br>
+                                    CI 아이콘 디자인 사용에 관한 문의는 <a href="">Contact</a>를 통해 연락해 주시기 바랍니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- 메인 소개 끝 -->
+                <!-- 양쪽 사이드 작은글씨 -->
+                <div class="about_bg_side tp1">
+                    <p class="about_side_txt">LEADER</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const txtWrap = document.querySelector('.about_txt_wrap');
+
+            if (txtWrap) {
+                const paragraphs = txtWrap.querySelectorAll('p');
+
+                // 초기 상태 강제 적용 (opacity 0, transform)
+                paragraphs.forEach((p) => {
+                    p.style.opacity = 0;
+                    p.style.transform = 'translateY(80px)';
+                });
+
+                // 아주 짧은 시간 후에 트랜지션 적용
+                setTimeout(() => {
+                    paragraphs.forEach((p, index) => {
+                        p.classList.add('on_delay');
+                        if (index === 1) p.classList.add('tp2');
+                        if (index === 2) p.classList.add('tp3');
+
+                        // inline style 제거하면 CSS transition 작동
+                        p.style.opacity = '';
+                        p.style.transform = '';
+                    });
+                }, 50); // 50ms 정도 딜레이
+            }
+        });
+    </script>
+
+
+</body>
+</html>
