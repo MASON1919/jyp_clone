@@ -1,18 +1,15 @@
 function initializeMenu() {
     const navbarOriginal = document.getElementById('navbar-original');
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const hamburgerBtn2 = document.getElementById('hamburger-btn2');
     const fullScreenMenu = document.getElementById('full-screen-menu');
     const fullScreenBackground = document.getElementById('full-screen-background');
     const hamburgerIcon = document.getElementById('hamburger-icon');
     const hamburgerIcon2 = document.getElementById('hamburger-icon2');
     const currentPage = window.location.pathname;
-    /*
     if (currentPage.includes('index.html')) {
         document.body.classList.add('white-text-page');
         hamburgerIcon.classList.add('on-index');
         hamburgerIcon2.classList.add('on-index');
-    }*/
+    }
 
     
     hamburgerIcon.addEventListener('click', () => {

@@ -1,7 +1,3 @@
-// 최선호, 진창훈, 이은광
-
-<<<<<<< HEAD
-=======
 //----- 진창훈-//
 const slides = document.querySelectorAll('.slides img');
 const prevBtn = document.querySelector('.prev');
@@ -47,4 +43,3 @@ function resetAutoSlide() {
 // 초기 실행
 showSlide(index);
 startAutoSlide();
->>>>>>> 4d9683b (N0.2)

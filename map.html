@@ -1,13 +1,9 @@
-<<<<<<< HEAD
-=======
-<!--김영준 - 지도-->
->>>>>>> c4fbc451b3f5cd4e52c099adb03285f4e06051b2
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
     <title>JYP CONTACT</title>
 
     <style>
@@ -474,9 +470,10 @@ header.scrolled nav ul li:last-child a.active {
     }
 }
     </style>
+    <link href="css/navbar.css" rel="stylesheet">
 </head>
 <body>
-
+    <header id="header-placeholder" class="header"></header>
     <header>
         <h1>JYP</h1>
         <nav>
@@ -669,7 +666,6 @@ header.scrolled nav ul li:last-child a.active {
     <script>
     const btnTop = document.querySelector('.btn-top');
 
-    // 스크롤 시 버튼 표시/숨김
     window.addEventListener('scroll', () => {
         if (window.scrollY > 200) {
             btnTop.style.display = 'block';
@@ -686,7 +682,7 @@ header.scrolled nav ul li:last-child a.active {
             behavior: 'smooth'
         });
     });
-//스크롤 아래로 내릴 시 네비 바 contact만 표시
+    //스크롤 아래로 내릴 시 네비 바 contact만 표시
     const header = document.querySelector('header');
     const nav = document.querySelector('header nav');
     const mainTitle = document.querySelector('header h1');
@@ -700,13 +696,12 @@ header.scrolled nav ul li:last-child a.active {
         }
     });
 
-</script>
-=======
+    </script>
     <title>Map</title>
     <link href="css/navbar.css" rel="stylesheet">
 </head>
+<script src="js/navbar.js" type="module"></script>
 <body>
     
->>>>>>> c4fbc451b3f5cd4e52c099adb03285f4e06051b2
 </body>
 </html>
