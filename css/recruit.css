@@ -41,7 +41,9 @@ ul {
     position: relative; 
     z-index: 1;
 }
-
+.recruit-container *{
+    overflow: hidden;
+}
 
 .system-section {
     position: relative;
