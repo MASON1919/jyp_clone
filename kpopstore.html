@@ -104,11 +104,9 @@
             align-items: center;
             gap: 8px;
         }
-        /* ✨ 변경된 CSS: 이모티콘 폰트 크기 및 색상 */
         .cart-icon-container .cart-emoji {
-            font-size: 2rem; /* 이모티콘을 더 크게 */
+            font-size: 2rem;
         }
-        /* ✨ 변경된 CSS: 숫자 위치 조정 */
         .cart-item-count {
             position: absolute;
             top: -10px;
@@ -170,13 +168,11 @@
             background-color: #dc3545;
             cursor: not-allowed;
         }
-        /* 추가된 CSS */
         .cart-icon-container .cart-text {
             font-size: 1rem;
             font-weight: bold;
             color: #000;
         }
-        /* ✨ 추가된 CSS: 숫자와 글자가 겹치지 않게 간격 조정 */
         .cart-text {
             margin-right: 25px; 
             position: relative;
@@ -184,7 +180,7 @@
         .cart-item-count {
             position: absolute;
             top: -5px;
-            right: -25px; /* 글자 '니'와 숫자 사이 간격 */
+            right: -25px;
         }
     </style>
 </head>
@@ -198,7 +194,7 @@
 
         <div class="controls">
             <select id="category-select" class="form-select w-25">
-                <option value="all">전체 상품</option>
+                <option value="" selected disabled>카테고리를 선택해주세요</option>
             </select>
             <input type="text" id="search-bar" class="form-control search-bar" placeholder="상품 검색...">
             
@@ -239,7 +235,6 @@
     <script>
         const CATEGORIES = [
             { id: 'all', name: '전체 상품', url: 'https://dummyjson.com/products' },
-            { id: 'skincare', name: '스킨케어', url: 'https://dummyjson.com/products/category/skincare' },
             { id: 'fragrances', name: '향수', url: 'https://dummyjson.com/products/category/fragrances' },
             { id: 'womens-bags', name: '가방', url: 'https://dummyjson.com/products/category/womens-bags' },
             { id: 'womens-jewellery', name: '액세서리', url: 'https://dummyjson.com/products/category/womens-jewellery' },
@@ -478,7 +473,7 @@
             if (query.length > 2) {
                 fetchProducts(`https://dummyjson.com/products/search?q=${query}`);
             } else if (query.length === 0) {
-                fetchProducts(CATEGORIES[0].url);
+                fetchProducts('https://dummyjson.com/products');
             }
         });
 
@@ -514,7 +509,7 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             populateCategorySelect();
-            fetchProducts(CATEGORIES[0].url);
+            fetchProducts('https://dummyjson.com/products'); 
             updateCartCount();
         });
     </script>

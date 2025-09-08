@@ -7,7 +7,7 @@
 <link href="css/footer.css" rel="stylesheet">
 
 <header id="header-placeholder" class="header"></header>
-<footer id="footer-placeholder" class="site-footer is-overlay"></footer>
+ 
 
 <script src="js/navbar.js" type="module"></script>
 <script src="js/footer.js" type="module"></script>

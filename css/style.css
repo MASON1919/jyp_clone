@@ -10,6 +10,17 @@ body, html {
   height: 100%;
   font-family: 'Arial', sans-serif;
   scroll-behavior: smooth;
+  overflow: hidden; /* 모든 스크롤바 숨김 */
+}
+
+/* 스크롤바 완전 숨김 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* Hero Section */
@@ -17,7 +28,6 @@ body, html {
   position: relative;
   width: 100vw;
   height: 100vh;
-  
   overflow: hidden;
 }
 
@@ -43,14 +53,34 @@ body, html {
   z-index: 1;
 }
 
-.slide video {
+/* 유튜브 컨테이너 스타일 - 완전 전체화면 고정 */
+.youtube-container {
+  position: fixed; /* absolute에서 fixed로 변경 */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.youtube-container iframe {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 100vh;
+  width: 120vw; /* 약간 더 크게 하여 완전히 덮음 */
+  height: 120vh; /* 약간 더 크게 하여 완전히 덮음 */
+  min-width: 120%;
+  min-height: 120%;
+  border: none;
+  pointer-events: none; /* 동영상 위의 클릭 방지 */
   object-fit: cover;
+}
+
+/* 활성 슬라이드의 iframe만 포인터 이벤트 허용 */
+.slide.active .youtube-container iframe {
+  pointer-events: auto;
 }
 
 .overlay {
@@ -66,13 +96,12 @@ body, html {
 /* 각 슬라이드별 콘텐츠 */
 .slide-content {
   position: absolute;
-  top: 50%; 
+  top: 90%; 
   left: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
   text-align: center;
   z-index: 3;
-  max-width: 800px;
   padding: 0 20px;
 }
 
@@ -91,50 +120,68 @@ body, html {
   line-height: 1.5;
 }
 
-/* CTA 버튼 스타일 */
+/* CTA 버튼 - 박스 없이 텍스트만 */
 .cta-btn {
   display: inline-block;
-  padding: 15px 30px;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  padding: 0; /* 패딩 제거 */
   color: #fff;
   text-decoration: none;
-  font-size: 1.1rem;
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 1.8rem;
   font-weight: bold;
-  border-radius: 30px;
   transition: all 0.3s ease;
-  text-shadow: none;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* 텍스트 그림자만 유지 */
+  backdrop-filter: none; /* 블러 효과 제거 */
 }
 
 .cta-btn:hover {
-  background: linear-gradient(45deg, #764ba2, #667eea);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  background: none; /* 호버시에도 배경 없음 */
+  border: none; /* 호버시에도 테두리 없음 */
+  transform: scale(1.05);
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.9); /* 호버시 그림자만 강화 */
 }
 
+/* 네비게이션 버튼 스타일 */
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.2);
+  background: transparent; /* 배경 제거 */
   color: #fff;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: none;
   padding: 12px 20px;
   cursor: pointer;
   z-index: 4;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: bold;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  min-height: 50px;
 }
 
 .nav-btn:hover {
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.1); /* 호버시 약간의 배경만 */
   transform: translateY(-50%) scale(1.05);
+}
+
+.nav-text {
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.page-counter {
+  font-size: 1.2rem; /* 기존 0.8rem의 2배 */
+  background: transparent; /* 배경 제거 */
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-weight: bold; /* 더 굵게 */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* 가독성을 위한 그림자 */
 }
 
 .prev {
@@ -145,246 +192,33 @@ body, html {
   right: 30px;
 }
 
-/* 음소거 버튼 */
-.sound-btn {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-  border: 2px solid rgba(255,255,255,0.3);
-  padding: 12px;
-  cursor: pointer;
-  z-index: 4;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.sound-btn:hover {
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
-  transform: scale(1.1);
-}
-
-/* 스크롤 인디케이터 애니메이션 */
-.scroll-indicator {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 4;
-  text-align: center;
-  animation: fadeInOut 3s ease-in-out infinite;
-}
-
-.scroll-text {
-  color: rgba(255,255,255,0.8);
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-}
-
-.scroll-arrow {
-  width: 30px;
-  height: 50px;
-  border: 2px solid rgba(255,255,255,0.6);
-  border-radius: 20px;
-  margin: 0 auto;
-  position: relative;
-}
-
-.scroll-arrow-inner {
-  width: 6px;
-  height: 10px;
-  background: rgba(255,255,255,0.8);
-  border-radius: 3px;
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: scrollBounce 2s ease-in-out infinite;
-}
-
-@keyframes fadeInOut {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-@keyframes scrollBounce {
-  0%, 20% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(15px); }
-  80%, 100% { transform: translateX(-50%) translateY(0); }
-}
-
-/* Detail Sections - 흰색 배경으로 변경 */
-.detail-section {
-  position: fixed;
-  top: 100vh; /* 화면 아래에서 시작 */
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #ffffff; /* 흰색 배경으로 변경 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  z-index: 50; /* navbar가 보이도록 낮은 z-index */
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  overflow: hidden;
-}
-
-.detail-section.active {
-  transform: translateY(-100vh); /* 위로 슬라이드 */
-}
-
-.detail-container {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
-  z-index: 51;
-}
-
-.detail-content {
-  text-align: center;
-  color: #333333; /* 텍스트 색상을 어두운 색으로 변경 */
-  position: relative;
-  z-index: 52;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: contentSlideUp 0.8s ease-out 0.4s forwards;
-  margin-top: 80px; /* navbar 공간 확보 */
-}
-
-.detail-content h2 {
-  font-size: 3rem;
-  margin-bottom: 3rem;
-  color: #333333; /* 제목 색상 어두운 색으로 변경 */
-  text-shadow: none; /* 그림자 제거 */
-}
-
-.detail-subtitle {
-  font-size: 1.4rem;
-  margin-bottom: 3rem;
-  opacity: 0.8;
-  font-weight: 300;
-  line-height: 1.6;
-  color: #666666; /* 부제목 색상 */
-}
-
-/* 콘텐츠 슬라이드업 애니메이션 */
-@keyframes contentSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-bottom: 3rem;
-}
-
-.detail-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #e0e0e0; /* 회색 테두리 */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  border-radius: 20px;
-  padding: 40px 30px;
-  text-align: center;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 53;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.detail-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-color: #667eea; /* 호버 시 테두리 색상 변경 */
-}
-
-/* 카드들의 순차적 애니메이션 */
-.detail-section.active .detail-card:nth-child(1) {
-  animation: cardFadeInUp 0.6s ease-out 0.6s forwards;
-}
-
-.detail-section.active .detail-card:nth-child(2) {
-  animation: cardFadeInUp 0.6s ease-out 0.7s forwards;
-}
-
-.detail-section.active .detail-card:nth-child(3) {
-  animation: cardFadeInUp 0.6s ease-out 0.8s forwards;
-}
-
-@keyframes cardFadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card-icon {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  display: block;
-}
-
-.detail-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  color: #333333; /* 카드 제목 색상 어두운 색으로 변경 */
-}
-
-.detail-card p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #666666; /* 카드 텍스트 색상 회색으로 변경 */
-}
-
-.back-to-hero {
-  background: #667eea;
-  color: white;
-  border: 2px solid #667eea;
-  padding: 15px 30px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 54;
-}
-
-.back-to-hero:hover {
-  background: #764ba2;
-  border-color: #764ba2;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-}
-
 /* 반응형 디자인 */
 @media (max-width: 768px) {
+  /* 모바일에서 스크롤 인디케이터 숨기기 */
+  .scroll-indicator {
+    display: none !important;
+  }
+  
+  /* 모바일 터치 가이드 표시 */
+  .mobile-touch-guide {
+    display: block;
+  }
+  
+  /* 모바일에서 슬라이드 콘텐츠를 중앙 하단으로 이동 */
+  .slide-content {
+    position: fixed; /* absolute에서 fixed로 변경하여 푸터와의 충돌 방지 */
+    top: auto;
+    bottom: 80px; /* 푸터 바로 위에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4; /* 높은 z-index로 설정 */
+    width: calc(100% - 40px); /* 좌우 여백 */
+    max-width: 400px; /* 최대 너비 제한 */
+  }
+  
   .slide-content h1 {
     font-size: 2.5rem;
+    margin-bottom: 1rem;
   }
   
   .slide-content p {
@@ -392,38 +226,66 @@ body, html {
     margin-bottom: 1.5rem;
   }
   
+  /* 모바일에서 CTA 버튼 크기 조정 */
   .cta-btn {
-    padding: 12px 25px;
-    font-size: 1rem;
+    font-size: 1.4rem;
+    display: block; /* 블록 요소로 변경 */
+    text-align: center;
+    padding: 12px 20px; /* 터치하기 쉽도록 패딩 추가 */
+    background: rgba(0,0,0,0.3); /* 모바일에서는 배경 추가 */
+    border-radius: 8px; /* 둥근 모서리 */
+    backdrop-filter: blur(10px); /* 블러 효과 */
+    -webkit-backdrop-filter: blur(10px); /* Safari 지원 */
+  }
+  
+  .cta-btn:hover,
+  .cta-btn:active {
+    background: rgba(0,0,0,0.5);
+    transform: scale(1.02);
+  }
+  
+  .mobile-touch-guide h1 {
+    font-size: 1.8rem;
+    padding: 15px 25px;
   }
   
   .nav-btn {
-    padding: 10px 15px;
-    font-size: 0.9rem;
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    min-width: 70px;
+    min-height: 45px;
+  }
+  
+  .nav-text {
+    font-size: 0.7rem;
+  }
+  
+  .page-counter {
+    font-size: 1.2rem; /* 모바일에서도 크게 */
+    padding: 2px 8px;
   }
   
   .prev {
-    left: 20px;
+    left: 15px;
   }
   
   .next {
-    right: 20px;
+    right: 15px;
   }
   
   .sound-btn {
     bottom: 20px;
     right: 20px;
-    width: 45px;
-    height: 45px;
-    font-size: 1rem;
+    width: 50px;
+    height: 50px;
   }
   
-  .scroll-indicator {
-    bottom: 60px;
+  .sound-btn .sound-icon {
+    font-size: 18px;
   }
   
   .detail-section {
-    padding: 40px 20px;
+    padding: 40px 15px;
   }
   
   .detail-content {
@@ -432,12 +294,12 @@ body, html {
   }
   
   .detail-content h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
   }
   
   .detail-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 2rem;
   }
   
@@ -447,6 +309,59 @@ body, html {
   }
   
   .detail-card {
-    padding: 30px 20px;
+    padding: 25px 20px;
+  }
+  
+  .detail-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .detail-card p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-touch-guide h1 {
+    font-size: 1.5rem;
+    padding: 12px 20px;
+  }
+  
+  .slide-content h1 {
+    font-size: 2rem;
+  }
+  
+  .slide-content p {
+    font-size: 1rem;
+  }
+  
+  /* 모바일에서 CTA 버튼 크기 추가 조정 */
+  .cta-btn {
+    font-size: 1.2rem;
+    padding: 10px 16px;
+  }
+  
+  .cta-btn:hover,
+  .cta-btn:active {
+    font-size: 1.2rem; /* 가장 작은 화면에서 호버시 크기 변화 없음 */
+  }
+  
+  /* 모바일에서 CTA 버튼을 더 하단으로 */
+  .slide-content {
+    bottom: 60px; /* 더 작은 화면에서는 더 아래로 */
+  }
+  
+  .detail-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .nav-btn {
+    padding: 6px 12px;
+    min-width: 60px;
+    min-height: 40px;
+  }
+  
+  .page-counter {
+    font-size: 1rem; /* 가장 작은 화면에서도 크게 */
   }
 }
