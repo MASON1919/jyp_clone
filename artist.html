@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Artist Masonry</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/navbar.css" rel="stylesheet">
 
   <style>
     body {
@@ -152,10 +153,14 @@
     .page_wrap a:hover i {
       color: #000;
     }
+    .content-wrapper{
+      margin-top: 5rem;
+    }
   </style>
 </head>
 
 <body>
+  <header id="header-placeholder" class="header"></header>
   <div class="content-wrapper">
     <div class="main-title">ARTIST</div>
 
@@ -170,7 +175,7 @@
       <a href="#" target="_blank">
         <div class="artist-card" data-name="SEONHO">
           <div class="artist-img-wrapper">
-            <img src="image4.jpg" alt="SEONHO">
+            <img src="images/image4.jpg" alt="SEONHO">
             <div class="artist-overlay"></div>
             <div class="artist-plus">SEONHO</div>
           </div>
@@ -180,7 +185,7 @@
       <a href="#" target="_blank">
         <div class="artist-card" data-name="KWANG">
           <div class="artist-img-wrapper">
-            <img src="image5.jpg" alt="KWANG">
+            <img src="images/image5.jpg" alt="KWANG">
             <div class="artist-overlay"></div>
             <div class="artist-plus">KWANG</div>
           </div>
@@ -190,7 +195,7 @@
       <a href="#" target="_blank">
         <div class="artist-card" data-name="WOONG">
           <div class="artist-img-wrapper">
-            <img src="image6.jpg" alt="WOONG">
+            <img src="images/image6.jpg" alt="WOONG">
             <div class="artist-overlay"></div>
             <div class="artist-plus">WOONG</div>
           </div>
@@ -200,7 +205,7 @@
       <a href="#" target="_blank">
         <div class="artist-card" data-name="HOON">
           <div class="artist-img-wrapper">
-            <img src="image3.jpg" alt="HOON">
+            <img src="images/image3.jpg" alt="HOON">
             <div class="artist-overlay"></div>
             <div class="artist-plus">HOON</div>
           </div>
@@ -210,7 +215,7 @@
       <a href="#" target="_blank">
         <div class="artist-card" data-name="DUCK">
           <div class="artist-img-wrapper">
-            <img src="image2.jpg" alt="DUCK">
+            <img src="images/image2.jpg" alt="DUCK">
             <div class="artist-overlay"></div>
             <div class="artist-plus">DUCK</div>
           </div>
@@ -220,7 +225,7 @@
       <a href="#" target="_blank">
         <div class="artist-card" data-name="JUN">
           <div class="artist-img-wrapper">
-            <img src="image1.jpg" alt="JUN">
+            <img src="images/image1.jpg" alt="JUN">
             <div class="artist-overlay"></div>
             <div class="artist-plus">JUN</div>
           </div>
@@ -289,6 +294,7 @@
       masonryLayout('.artist-grid', '.artist-card');
     });
   </script>
+  <script src="js/navbar.js" type="module"></script>
 </body>
 
 </html>
