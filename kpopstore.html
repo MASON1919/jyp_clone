@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Beauty Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrNjQ1gLw/gB/I3wzV5s4j6Q9yv5N5b7z9y3z5lJ8ZJj3w6NfE5n7p5e6e8e8r8s5d8g4g5q5t5g2A5d2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+        .custom-header {
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .custom-header h1 {
+            color: #000000;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .text-custom-muted {
+            color: #666666;
+        }
+        .product-card-wrapper {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: 1px solid #e0e0e0;
+        }
+        .product-card-wrapper:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+        .product-card-wrapper .card-img-top {
+            height: 250px;
+            object-fit: contain;
+            padding: 1rem;
+        }
+        .product-card-wrapper .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-card-wrapper .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .product-card-wrapper .price {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #000000;
+            margin-top: 0.5rem;
+        }
+        .btn-outline-dark {
+            color: #000000;
+            border-color: #000000;
+        }
+        .btn-outline-dark:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .loading-message {
+            color: #666666;
+        }
+        .loading-message::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ccc;
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .controls .form-select, .controls .search-bar {
+            flex-grow: 1;
+        }
+        .search-bar {
+            max-width: 400px;
+        }
+        .cart-icon-container {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        /* ✨ 변경된 CSS: 이모티콘 폰트 크기 및 색상 */
+        .cart-icon-container .cart-emoji {
+            font-size: 2rem; /* 이모티콘을 더 크게 */
+        }
+        /* ✨ 변경된 CSS: 숫자 위치 조정 */
+        .cart-item-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #000000;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 6px;
+            font-size: 0.75rem;
+            line-height: 1;
+        }
+        .modal-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+        }
+        .modal-content-box {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-content-box .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-right: 1rem;
+            border: 1px solid #e0e0e0;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .quick-view-image {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+        }
+        .sold-out {
+            color: #fff;
+            background-color: #dc3545;
+            cursor: not-allowed;
+        }
+        /* 추가된 CSS */
+        .cart-icon-container .cart-text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #000;
+        }
+        /* ✨ 추가된 CSS: 숫자와 글자가 겹치지 않게 간격 조정 */
+        .cart-text {
+            margin-right: 25px; 
+            position: relative;
+        }
+        .cart-item-count {
+            position: absolute;
+            top: -5px;
+            right: -25px; /* 글자 '니'와 숫자 사이 간격 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-5">
+        <header class="bg-white p-5 text-center rounded-4 shadow-sm mb-5 custom-header">
+            <h1 class="display-5 fw-bold">K-BEAUTY STORE</h1>
+            <p class="lead mt-2 text-custom-muted">최신 K-뷰티 제품들을 한 곳에서 만나보세요!</p>
+        </header>
+
+        <div class="controls">
+            <select id="category-select" class="form-select w-25">
+                <option value="all">전체 상품</option>
+            </select>
+            <input type="text" id="search-bar" class="form-control search-bar" placeholder="상품 검색...">
+            
+            <div class="cart-icon-container ms-3">
+                <span class="cart-emoji">🛒</span>
+                <span class="cart-text">장바구니</span>
+                <span id="cart-item-count" class="cart-item-count">0</span>
+            </div>
+        </div>
+        
+        <div id="loading-message" class="text-center py-5 fs-5 loading-message">
+            상품 정보를 불러오는 중...
+        </div>
+        
+        <div id="products-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"></div>
+    </div>
+
+    <div id="cart-modal" class="modal-container">
+        <div class="modal-content-box">
+            <span class="close-btn" id="close-cart-modal-btn">&times;</span>
+            <h3 class="mb-4">장바구니</h3>
+            <div id="cart-items-container"></div>
+            <div class="d-flex justify-content-between mt-4 border-top pt-3">
+                <h5>총 상품 금액:</h5>
+                <h5 id="cart-total-price">0원</h5>
+            </div>
+            <button id="clear-cart-btn" class="btn btn-outline-danger w-100 mt-3">장바구니 전체 비우기</button>
+        </div>
+    </div>
+
+    <div id="quick-view-modal" class="modal-container">
+        <div class="modal-content-box">
+            <span class="close-btn" id="close-quick-view-modal-btn">&times;</span>
+            <div id="quick-view-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const CATEGORIES = [
+            { id: 'all', name: '전체 상품', url: 'https://dummyjson.com/products' },
+            { id: 'skincare', name: '스킨케어', url: 'https://dummyjson.com/products/category/skincare' },
+            { id: 'fragrances', name: '향수', url: 'https://dummyjson.com/products/category/fragrances' },
+            { id: 'womens-bags', name: '가방', url: 'https://dummyjson.com/products/category/womens-bags' },
+            { id: 'womens-jewellery', name: '액세서리', url: 'https://dummyjson.com/products/category/womens-jewellery' },
+            { id: 'womens-dresses', name: '원피스', url: 'https://dummyjson.com/products/category/womens-dresses' },
+            { id: 'womens-shoes', name: '신발', url: 'https://dummyjson.com/products/category/womens-shoes' }
+        ];
+
+        const productsContainer = document.getElementById('products-container');
+        const loadingMessage = document.getElementById('loading-message');
+        const categorySelect = document.getElementById('category-select');
+        const searchBar = document.getElementById('search-bar');
+        const cartIcon = document.querySelector('.cart-icon-container');
+        const cartItemCount = document.getElementById('cart-item-count');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCartModalBtn = document.getElementById('close-cart-modal-btn');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+        const clearCartBtn = document.getElementById('clear-cart-btn');
+        const quickViewModal = document.getElementById('quick-view-modal');
+        const closeQuickViewModalBtn = document.getElementById('close-quick-view-modal-btn');
+        const quickViewContent = document.getElementById('quick-view-content');
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const translatedTitlesCache = {};
+
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartItemCount.textContent = count;
+        }
+
+        function updateCartModal() {
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-center text-custom-muted">장바구니가 비어있습니다.</p>';
+                cartTotalPrice.textContent = '0원';
+                return;
+            }
+
+            const itemsHTML = cart.map(item => {
+                const formattedPrice = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(item.price * 1300);
+                return `
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="${item.image}" alt="${item.title}" class="cart-item-image">
+                        <div class="flex-grow-1">
+                            <h6>${item.title}</h6>
+                            <p class="mb-0 text-custom-muted">${formattedPrice} x ${item.quantity}</p>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger remove-btn" data-id="${item.id}">삭제</button>
+                    </div>
+                `;
+            }).join('');
+            
+            cartItemsContainer.innerHTML = itemsHTML;
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotalPrice.textContent = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(total * 1300);
+
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.dataset.id);
+                    cart = cart.filter(item => item.id !== id);
+                    saveCart();
+                    updateCartCount();
+                    updateCartModal();
+                });
+            });
+        }
+        
+        async function addToCart(product) {
+            const translatedTitle = await translateText(product.title);
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ 
+                    id: product.id,
+                    title: translatedTitle, 
+                    price: product.price,
+                    image: product.images[0],
+                    quantity: 1 
+                });
+            }
+            saveCart();
+            updateCartCount();
+            alert(`${translatedTitle} 상품이 장바구니에 추가되었습니다!`);
+        }
+        
+        async function translateText(text) {
+            if (translatedTitlesCache[text]) {
+                return translatedTitlesCache[text];
+            }
+
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ko&dt=t&q=${encodeURI(text)}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const translated = data[0][0][0];
+                translatedTitlesCache[text] = translated;
+                return translated;
+            } catch (error) {
+                console.error('번역 중 오류가 발생했습니다:', error);
+                return text;
+            }
+        }
+
+        async function openQuickViewModal(productId) {
+            try {
+                const response = await fetch(`https://dummyjson.com/products/${productId}`);
+                const product = await response.json();
+                
+                const translatedTitle = await translateText(product.title);
+                const formattedPrice = new Intl.NumberFormat('ko-KR', { 
+                    style: 'currency', 
+                    currency: 'KRW' 
+                }).format(product.price * 1300);
+
+                quickViewContent.innerHTML = `
+                    <h3 class="mb-4">${translatedTitle}</h3>
+                    <img src="${product.images[0]}" alt="${product.title}" class="quick-view-image mb-3">
+                    <p class="fw-bold fs-5">${formattedPrice}</p>
+                    <p class="text-custom-muted">${product.description}</p>
+                    <p class="mb-1"><strong>브랜드:</strong> ${product.brand}</p>
+                    <p><strong>재고:</strong> ${product.stock}개</p>
+                    <button class="btn btn-primary mt-3 w-100 add-to-cart-btn-modal" data-product-id="${product.id}">장바구니 담기</button>
+                `;
+                quickViewModal.style.display = 'flex';
+
+                document.querySelector('.add-to-cart-btn-modal').addEventListener('click', () => {
+                    addToCart(product);
+                    quickViewModal.style.display = 'none';
+                });
+            } catch (error) {
+                console.error('Error fetching quick view product:', error);
+            }
+        }
+
+        async function createProductCardHTML(product) {
+            const translatedTitle = await translateText(product.title);
+            const formattedPrice = new Intl.NumberFormat('ko-KR', { 
+                style: 'currency', 
+                currency: 'KRW' 
+            }).format(product.price * 1300);
+            
+            const isSoldOut = product.stock === 0;
+            const cartButtonText = isSoldOut ? '품절' : '장바구니 담기';
+            const cartButtonClass = isSoldOut ? 'btn-outline-danger sold-out' : 'btn-outline-dark add-to-cart-btn';
+            const cartButtonDisabled = isSoldOut ? 'disabled' : '';
+
+            return `
+                <div class="col">
+                    <div class="card h-100 product-card-wrapper border-0 bg-white" data-product-id="${product.id}">
+                        <img src="${product.images[0]}" class="card-img-top" alt="${product.title}">
+                        <div class="card-body">
+                            <div>
+                                <h5 class="card-title">${translatedTitle}</h5>
+                                <p class="price">${formattedPrice}</p>
+                            </div>
+                            <div class="d-flex gap-2 mt-3">
+                                <button class="btn btn-outline-info flex-fill quick-view-btn">자세히 보기</button>
+                                <button class="btn ${cartButtonClass}" ${cartButtonDisabled}>${cartButtonText}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function fetchProducts(url) {
+            try {
+                loadingMessage.style.display = 'block';
+                productsContainer.innerHTML = '';
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                loadingMessage.style.display = 'none';
+                
+                const products = data.products || data;
+                
+                if (products && products.length > 0) {
+                    const cardsHTML = await Promise.all(products.map(createProductCardHTML));
+                    productsContainer.innerHTML = cardsHTML.join('');
+                    
+                    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const card = e.target.closest('.product-card-wrapper');
+                            const productId = parseInt(card.dataset.productId);
+                            const productToAdd = products.find(p => p.id === productId);
+                            if (productToAdd) {
+                                addToCart(productToAdd);
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll('.quick-view-btn').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const card = e.target.closest('.product-card-wrapper');
+                            const productId = parseInt(card.dataset.productId);
+                            openQuickViewModal(productId);
+                        });
+                    });
+                } else {
+                    productsContainer.innerHTML = '<p class="text-center text-custom-muted py-5 fs-5">상품이 없습니다.</p>';
+                }
+            } catch (e) {
+                console.error('Error fetching products:', e);
+                loadingMessage.textContent = '상품을 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.';
+            }
+        }
+        
+        function populateCategorySelect() {
+            CATEGORIES.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+        }
+        
+        categorySelect.addEventListener('change', (e) => {
+            const selectedCategory = CATEGORIES.find(cat => cat.id === e.target.value);
+            if (selectedCategory) {
+                fetchProducts(selectedCategory.url);
+            }
+        });
+
+        searchBar.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            if (query.length > 2) {
+                fetchProducts(`https://dummyjson.com/products/search?q=${query}`);
+            } else if (query.length === 0) {
+                fetchProducts(CATEGORIES[0].url);
+            }
+        });
+
+        cartIcon.addEventListener('click', () => {
+            updateCartModal();
+            cartModal.style.display = 'flex';
+        });
+
+        closeCartModalBtn.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+
+        closeQuickViewModalBtn.addEventListener('click', () => {
+            quickViewModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.style.display = 'none';
+            }
+            if (e.target === quickViewModal) {
+                quickViewModal.style.display = 'none';
+            }
+        });
+
+        clearCartBtn.addEventListener('click', () => {
+            cart = [];
+            saveCart();
+            updateCartCount();
+            updateCartModal();
+            alert("장바구니가 모두 비워졌습니다.");
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCategorySelect();
+            fetchProducts(CATEGORIES[0].url);
+            updateCartCount();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
