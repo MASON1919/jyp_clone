@@ -111,9 +111,9 @@ li::before {
 
 .benefit-section {
     padding: 80px 0;
-    background-color: #fff; /* ★★★ 배경을 가릴 흰색 지정 */
-    position: relative; /* z-index 적용을 위해 필요 */
-    z-index: 1; /* 이미지보다 위에 있도록 설정 */
+    background-color: #fff;
+    position: relative;
+    z-index: 1;
 }
 .benefit-section .benefit-container {
     max-width: 1200px;

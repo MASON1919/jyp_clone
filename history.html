@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JYP HISTORY</title>
   <link rel="stylesheet" href="css/history.css" />
+  <link href="node_modules/aos/dist/aos.css" rel="stylesheet">
 
   <!-- 이미 프로젝트에 main.css가 있다면, 그 아래에 history.css를 추가 로드해도 됩니다 -->
 </head>
@@ -12,25 +13,25 @@
   <!-- Top Nav -->
   <header class="site-header">
     <nav class="nav">
-      <a class="brand" href="#">JYP</a>
+      <a class="brand" href="index.html">JYP</a>
       <ul class="menu">
-        <li><a href="#">ABOUT JYP</a></li>
+        <li><a href="about.html">ABOUT JYP</a></li>
         <li class="active"><a href="#">HISTORY</a></li>
-        <li><a href="#">ARTISTS</a></li>
-        <li><a href="#">CONTACT</a></li>
+        <li><a href="artist.html">ARTISTS</a></li>
+        <li><a href="map.html">CONTACT</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="container">
     <!-- Page Title -->
-    <h1 class="page-title">HISTORY</h1>
+    <h1 class="page-title" data-aos="fade-up">HISTORY</h1>
 
     <!-- Timeline -->
     <section class="timeline">
 
       <!-- ===== 2025 ===== -->
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2025</div>
         <div class="items">
           <div class="row">
@@ -45,7 +46,7 @@
       </div>
 
       <!-- ===== 2024 ===== -->
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2024</div>
         <div class="items">
           <div class="row">
@@ -68,7 +69,7 @@
       </div>
 
       <!-- ===== 2023 ===== -->
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2023</div>
         <div class="items">
           <div class="row">
@@ -87,7 +88,7 @@
       </div>
 
       <!-- ===== 중간 연도들(예시) ===== -->
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2019</div>
         <div class="items">
           <div class="row"><div class="month">10</div><div class="desc">World Tour ‘City Lights’</div></div>
@@ -95,7 +96,7 @@
         </div>
       </div>
 
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2015</div>
         <div class="items">
           <div class="row"><div class="month">12</div><div class="desc">Festival Season</div></div>
@@ -103,28 +104,28 @@
         </div>
       </div>
 
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2010</div>
         <div class="items">
           <div class="row"><div class="month">07</div><div class="desc">JYP Center 확장</div></div>
         </div>
       </div>
 
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2005</div>
         <div class="items">
           <div class="row"><div class="month">02</div><div class="desc">Global Audition 시작</div></div>
         </div>
       </div>
 
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">2000</div>
         <div class="items">
           <div class="row"><div class="month">09</div><div class="desc">법인 전환</div></div>
         </div>
       </div>
 
-      <div class="year-block">
+      <div class="year-block" data-aos="fade-up">
         <div class="year">1996</div>
         <div class="items">
           <div class="row"><div class="month">04</div><div class="desc">JYP 설립</div></div>
@@ -138,6 +139,14 @@
   <footer class="site-footer">
     <p>© JYP. All Rights Reserved.</p>
   </footer>
+  <script src="node_modules/aos/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000, 
+      once: true, 
+      offset: 100
+    });
+  </script>
 </body>
 
 </html>

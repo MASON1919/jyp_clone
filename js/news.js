@@ -1,4 +1,4 @@
-const API_KEY = '0417530a96cd4fd4be5544bff2339368';
+const API_KEY = '___';
 
 const url = `https://newsapi.org/v2/everything?q=Apple&from=2025-08-07&sortBy=popularity&apiKey=${API_KEY}`;
 

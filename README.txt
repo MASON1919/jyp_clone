@@ -1,6 +1,6 @@
 참고사이트 - jyp 홈페이지
 
-*git push 하기전에 api키는 지우기
+*깃헙 올리기 전에 api키는 지우기
 
 모든 페이지에
 <link href="css/navbar.css" rel="stylesheet">
@@ -19,6 +19,13 @@ https://fakestoreapi.com/products
 
 AOS 사용하기
 <link href="node_modules/aos/dist/aos.css" rel="stylesheet">
+<script>
+    AOS.init({
+      duration: 1000, 
+      once: true, 
+      offset: 100
+    });
+  </script>
 <script src="node_modules/aos/dist/aos.js"></script>
 html태그에 data-aos="애니메이션 이름" 을 속성으로 추가
 

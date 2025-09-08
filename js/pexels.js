@@ -24,8 +24,7 @@ async function startNewSearch() {
         alert('검색어를 입력해주세요.');
         return;
     }
-
-    container.innerHTML = ''; 
+    container.innerHTML = '';
     msnry.reloadItems();
     msnry.layout();
     
@@ -44,7 +43,7 @@ async function displayImages() {
 
     try {
         const url = `https://api.pexels.com/v1/search?query=${currentQuery}&per_page=20&page=${currentPage}`;
-        const response = await fetch(url, { headers: { Authorization: API_KEY } });
+        const response = await fetch(url, { headers: { Authorization: API_KEY }});
         if (!response.ok) throw new Error(`HTTP 오류: ${response.status}`);
         const data = await response.json();
 
@@ -79,14 +78,71 @@ function appendImages(photos) {
         img.src = photo.src.medium;
         img.alt = photo.alt;
         item.appendChild(img);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'overlay';
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container';
+
+        const downloadButton = document.createElement('button');
+        downloadButton.innerHTML = '다운로드';
+
+        downloadButton.addEventListener('click', async () => {
+            try {
+                downloadButton.innerHTML = '다운로드 중...';
+                downloadButton.disabled = true;
+
+                const response = await fetch(photo.src.original);
+                const blob = await response.blob();
+                
+                const blobUrl = URL.createObjectURL(blob);
+
+                const tempLink = document.createElement('a');
+                tempLink.href = blobUrl;
+                tempLink.setAttribute('download', `pexels-${photo.id}.jpg`);
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+
+                URL.revokeObjectURL(blobUrl);
+
+            } catch (error) {
+                console.error('다운로드 실패:', error);
+                alert('이미지 다운로드에 실패했습니다.');
+            } finally {
+                downloadButton.innerHTML = '다운로드';
+                downloadButton.disabled = false;
+            }
+        });
+        
+        const favoriteButton = document.createElement('button');
+        favoriteButton.innerHTML = '즐겨찾기';
+        
+        favoriteButton.addEventListener('click', () => {
+            const favorites = JSON.parse(localStorage.getItem('pexelsFavorites')) || [];
+            const isAlready = favorites.some(fav => fav.id === photo.id);
+
+            if (isAlready) {
+                alert('이미 즐겨찾기에 추가된 이미지입니다.');
+            } else {
+                favorites.push(photo);
+                localStorage.setItem('pexelsFavorites', JSON.stringify(favorites));
+                alert('즐겨찾기에 추가되었습니다!');
+            }
+        });
+
+        buttonContainer.appendChild(downloadButton);
+        buttonContainer.appendChild(favoriteButton);
+        overlay.appendChild(buttonContainer);
+        item.appendChild(overlay);
+
         fragment.appendChild(item);
         newItems.push(item);
     });
 
     container.appendChild(fragment);
-
     msnry.appended(newItems);
-
     imagesLoaded(newItems).on('progress', function() {
         msnry.layout();
     });
@@ -108,7 +164,7 @@ searchInput.addEventListener('keyup', (e) => {
 searchButton.addEventListener('click', startNewSearch);
 
 async function initialLoad() {
-    currentQuery = 'landscape';
+    currentQuery = 'seoul';
     await displayImages();
 }
 initialLoad();
