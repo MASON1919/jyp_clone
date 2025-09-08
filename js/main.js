@@ -17,11 +17,38 @@ let isDetailView = false;
 let isTransitioning = false;
 let players = {}; // 유튜브 플레이어 객체들을 저장
 let playersReady = {}; // 각 플레이어의 준비 상태 추적
+let userInteracted = false; // 사용자 상호작용 여부 추적
+let forceAutoplay = false; // 강제 자동재생 플래그
 const totalSlides = 5;
 
 // 모바일 감지 함수
 function isMobileDevice() {
   return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// 사용자 상호작용 감지 및 자동재생 활성화
+function enableUserInteraction() {
+  if (!userInteracted) {
+    userInteracted = true;
+    forceAutoplay = true;
+    console.log('🎬 User interaction detected - enabling full autoplay');
+    
+    // 모든 플레이어에 자동재생 권한 부여
+    Object.keys(players).forEach(i => {
+      if (players[i] && playersReady[i]) {
+        try {
+          players[i].mute(); // 확실히 음소거
+        } catch (error) {
+          console.error(`Error muting player ${i}:`, error);
+        }
+      }
+    });
+    
+    // 현재 활성 슬라이드의 비디오 즉시 재생
+    setTimeout(() => {
+      playCurrentVideo();
+    }, 100);
+  }
 }
 
 // 페이지 카운터 업데이트 함수
@@ -44,7 +71,7 @@ function updateMobileGuide() {
 
 // 유튜브 API 준비 완료 콜백
 function onYouTubeIframeAPIReady() {
-  console.log('YouTube API Ready');
+  console.log('🎯 YouTube API Ready');
   initializePlayers();
 }
 
@@ -59,7 +86,7 @@ function initializePlayers() {
           width: '100%',
           videoId: youtubeId,
           playerVars: {
-            'autoplay': 0, // 초기화 시에는 자동재생 하지 않음
+            'autoplay': 1, // 모든 플레이어에 자동재생 설정
             'mute': 1, // 항상 음소거
             'loop': 1,
             'playlist': youtubeId,
@@ -71,7 +98,9 @@ function initializePlayers() {
             'fs': 0,
             'cc_load_policy': 0,
             'disablekb': 1,
-            'playsinline': 1
+            'playsinline': 1,
+            'enablejsapi': 1,
+            'start': 0 // 처음부터 시작
           },
           events: {
             'onReady': onPlayerReady,
@@ -79,8 +108,9 @@ function initializePlayers() {
             'onError': onPlayerError
           }
         });
+        console.log(`🎥 Player ${i} initialized with video ID: ${youtubeId}`);
       } catch (error) {
-        console.error(`Error creating player ${i}:`, error);
+        console.error(`❌ Error creating player ${i}:`, error);
       }
     }
   });
@@ -89,40 +119,96 @@ function initializePlayers() {
 // 플레이어 준비 완료
 function onPlayerReady(event) {
   const playerIndex = getPlayerIndex(event.target);
-  console.log(`Player ${playerIndex} ready`);
+  console.log(`✅ Player ${playerIndex} ready`);
   playersReady[playerIndex] = true;
   
-  // 첫 번째 플레이어만 즉시 재생
+  // 모든 플레이어를 음소거로 설정
+  try {
+    event.target.mute();
+    console.log(`🔇 Player ${playerIndex} muted`);
+  } catch (error) {
+    console.error(`❌ Error muting player ${playerIndex}:`, error);
+  }
+  
+  // 첫 번째 플레이어는 즉시 재생 시도
   if (playerIndex === 0) {
     setTimeout(() => {
       playCurrentVideo();
       updatePageCounter();
       updateMobileGuide();
+      startAutoSlide();
     }, 500);
+  } else {
+    // 다른 플레이어들은 일시정지 상태로 대기
+    setTimeout(() => {
+      try {
+        event.target.pauseVideo();
+      } catch (error) {
+        console.error(`Error pausing player ${playerIndex}:`, error);
+      }
+    }, 100);
   }
 }
 
 // 플레이어 상태 변경
 function onPlayerStateChange(event) {
   const playerIndex = getPlayerIndex(event.target);
+  const stateNames = {
+    [-1]: 'UNSTARTED',
+    [0]: 'ENDED',
+    [1]: 'PLAYING',
+    [2]: 'PAUSED',
+    [3]: 'BUFFERING',
+    [5]: 'CUED'
+  };
+  
+  console.log(`🎬 Player ${playerIndex} state: ${stateNames[event.data] || event.data}`);
   
   // 동영상 종료 시 다음 슬라이드로 (디테일 뷰가 아닐 때만)
   if (event.data === YT.PlayerState.ENDED && playerIndex === index && !isDetailView) {
+    console.log(`🎬 Video ${playerIndex} ended, moving to next slide`);
     setTimeout(() => {
       nextSlide();
       resetAutoSlide();
     }, 1000);
   }
   
-  // 재생 시작 시 로그
+  // 재생 시작 시
   if (event.data === YT.PlayerState.PLAYING) {
-    console.log(`Video ${playerIndex} started playing`);
+    console.log(`▶️ Video ${playerIndex} started playing`);
+    userInteracted = true;
+    forceAutoplay = true;
+  }
+  
+  // 현재 활성 슬라이드가 일시정지되면 즉시 재시작 시도
+  if (event.data === YT.PlayerState.PAUSED && playerIndex === index && !isDetailView && !isTransitioning) {
+    console.log(`⚠️ Active video ${playerIndex} paused unexpectedly, attempting restart`);
+    setTimeout(() => {
+      if (players[playerIndex] && playersReady[playerIndex]) {
+        try {
+          players[playerIndex].mute();
+          players[playerIndex].playVideo();
+          console.log(`🔄 Restarted video ${playerIndex}`);
+        } catch (error) {
+          console.error(`❌ Error restarting video ${playerIndex}:`, error);
+        }
+      }
+    }, 1000);
   }
 }
 
 // 플레이어 에러 처리
 function onPlayerError(event) {
-  console.error('YouTube Player Error:', event.data);
+  console.error('❌ YouTube Player Error:', event.data);
+  const playerIndex = getPlayerIndex(event.target);
+  
+  // 에러 발생 시 재초기화 시도
+  setTimeout(() => {
+    if (playerIndex === index) {
+      console.log(`🔄 Attempting to recover player ${playerIndex}`);
+      playCurrentVideo();
+    }
+  }, 2000);
 }
 
 // 플레이어 인덱스 찾기
@@ -135,100 +221,174 @@ function getPlayerIndex(player) {
   return -1;
 }
 
-// 현재 동영상 재생
+// 현재 동영상 재생 - 강화된 버전
 function playCurrentVideo() {
   if (!players[index] || !playersReady[index]) {
-    console.log(`Player ${index} not ready yet, retrying...`);
-    // 플레이어가 준비되지 않았으면 잠시 후 재시도
-    setTimeout(() => playCurrentVideo(), 500);
+    console.log(`⏳ Player ${index} not ready yet, retrying in 1 second...`);
+    setTimeout(() => playCurrentVideo(), 1000);
     return;
   }
 
+  const player = players[index];
+  
   try {
-    // 항상 음소거 상태 유지
-    players[index].mute();
+    console.log(`🎬 Attempting to play video ${index}`);
     
-    // 동영상 재생
-    players[index].playVideo();
-    console.log(`Playing video ${index}`);
+    // 1. 강제 음소거
+    player.mute();
     
-    // 재생 상태 확인
+    // 2. 비디오를 처음부터 시작
+    player.seekTo(0, true);
+    
+    // 3. 현재 상태 확인
+    const currentState = player.getPlayerState();
+    console.log(`📊 Current state of player ${index}: ${currentState}`);
+    
+    // 4. 재생 시도
+    player.playVideo();
+    
+    // 5. 첫 번째 재생 상태 확인 (1초 후)
     setTimeout(() => {
-      const state = players[index].getPlayerState();
-      console.log(`Video ${index} state after play attempt:`, state);
-      if (state !== YT.PlayerState.PLAYING) {
-        console.log(`Retrying play for video ${index}`);
-        players[index].playVideo();
+      const state1 = player.getPlayerState();
+      console.log(`📊 Video ${index} state after 1s: ${state1}`);
+      
+      if (state1 !== YT.PlayerState.PLAYING && state1 !== YT.PlayerState.BUFFERING) {
+        console.log(`🔄 First retry for video ${index}`);
+        player.mute();
+        player.seekTo(0, true);
+        player.playVideo();
+        
+        // 6. 두 번째 재생 상태 확인 (2초 후)
+        setTimeout(() => {
+          const state2 = player.getPlayerState();
+          console.log(`📊 Video ${index} state after 2s retry: ${state2}`);
+          
+          if (state2 !== YT.PlayerState.PLAYING && state2 !== YT.PlayerState.BUFFERING) {
+            console.log(`🔄 Second retry for video ${index}`);
+            player.mute();
+            player.seekTo(0, true);
+            player.playVideo();
+            
+            // 7. 최종 재생 상태 확인 (3초 후)
+            setTimeout(() => {
+              const state3 = player.getPlayerState();
+              console.log(`📊 Video ${index} final state: ${state3}`);
+              
+              if (state3 !== YT.PlayerState.PLAYING && state3 !== YT.PlayerState.BUFFERING) {
+                console.log(`🔄 Final retry for video ${index} with loadVideoById`);
+                // 마지막 수단: 비디오 재로드
+                const youtubeId = slides[index].getAttribute('data-youtube-id');
+                if (youtubeId) {
+                  player.loadVideoById({
+                    videoId: youtubeId,
+                    startSeconds: 0
+                  });
+                  setTimeout(() => {
+                    player.mute();
+                    player.playVideo();
+                  }, 1000);
+                }
+              }
+            }, 3000);
+          }
+        }, 2000);
       }
     }, 1000);
+    
   } catch (error) {
-    console.error(`Error playing video ${index}:`, error);
+    console.error(`❌ Error playing video ${index}:`, error);
   }
 }
 
 // 모든 동영상 정지
 function stopAllVideos() {
+  console.log('⏹️ Stopping all videos');
   Object.keys(players).forEach(i => {
     if (players[i] && playersReady[i]) {
       try {
-        players[i].pauseVideo();
+        const currentState = players[i].getPlayerState();
+        if (currentState === YT.PlayerState.PLAYING || currentState === YT.PlayerState.BUFFERING) {
+          players[i].pauseVideo();
+          console.log(`⏸️ Stopped video ${i}`);
+        }
       } catch (error) {
-        console.error(`Error stopping video ${i}:`, error);
+        console.error(`❌ Error stopping video ${i}:`, error);
       }
     }
   });
 }
 
 function showSlide(i) {
-  if (isTransitioning) return;
+  if (isTransitioning) {
+    console.log('⚠️ Transition in progress, ignoring slide change');
+    return;
+  }
   
   isTransitioning = true;
+  console.log(`🎯 Transitioning to slide ${i} from slide ${index}`);
   
-  // 모든 슬라이드 숨기기 및 동영상 정지
+  // 이전 인덱스 저장
+  const previousIndex = index;
+  index = i;
+  
+  // 1. 모든 슬라이드 비활성화
   slides.forEach((slide, idx) => {
     slide.classList.remove('active');
   });
   
+  // 2. 모든 동영상 정지
   stopAllVideos();
 
-  // 현재 슬라이드만 활성화
+  // 3. 새 슬라이드 활성화
   const activeSlide = slides[i];
   if (activeSlide) {
     activeSlide.classList.add('active');
+    console.log(`✅ Activated slide ${i}`);
     
-    // 잠시 후 현재 동영상 재생 (트랜지션 완료 후)
+    // 4. 잠시 대기 후 새 동영상 재생
     setTimeout(() => {
+      console.log(`🎬 Starting playback for slide ${i}`);
       playCurrentVideo();
       isTransitioning = false;
+      console.log(`✅ Transition to slide ${i} complete`);
     }, 300);
   } else {
+    console.error(`❌ Slide ${i} not found`);
     isTransitioning = false;
   }
   
-  // 페이지 카운터 및 모바일 가이드 업데이트
+  // 5. UI 업데이트
   updatePageCounter();
   updateMobileGuide();
 }
 
 function nextSlide() {
-  if (isTransitioning) return;
-  index = (index + 1) % totalSlides;
-  console.log(`Next slide: ${index}`);
-  showSlide(index);
+  if (isTransitioning) {
+    console.log('⚠️ Cannot go to next slide - transition in progress');
+    return;
+  }
+  
+  const newIndex = (index + 1) % totalSlides;
+  console.log(`➡️ Moving to next slide: ${newIndex}`);
+  showSlide(newIndex);
 }
 
 function prevSlide() {
-  if (isTransitioning) return;
-  index = (index - 1 + totalSlides) % totalSlides;
-  console.log(`Previous slide: ${index}`);
-  showSlide(index);
+  if (isTransitioning) {
+    console.log('⚠️ Cannot go to previous slide - transition in progress');
+    return;
+  }
+  
+  const newIndex = (index - 1 + totalSlides) % totalSlides;
+  console.log(`⬅️ Moving to previous slide: ${newIndex}`);
+  showSlide(newIndex);
 }
 
 // 디테일 섹션 표시 (스크롤 다운 또는 모바일 터치)
 function showDetailSection(sectionId) {
   if (isTransitioning || isDetailView) return;
   
-  console.log(`Showing detail section: ${sectionId}`);
+  console.log(`📄 Showing detail section: ${sectionId}`);
   isTransitioning = true;
   isDetailView = true;
   clearInterval(autoSlide);
@@ -250,7 +410,7 @@ function showDetailSection(sectionId) {
   // 전환 완료 후 플래그 해제
   setTimeout(() => {
     isTransitioning = false;
-    console.log('Detail section transition complete');
+    console.log('✅ Detail section transition complete');
   }, 800);
 
   // 스크롤을 맨 위로
@@ -261,6 +421,7 @@ function showDetailSection(sectionId) {
 function backToHero() {
   if (isTransitioning || !isDetailView) return;
   
+  console.log('🏠 Returning to hero section');
   isTransitioning = true;
   isDetailView = false;
 
@@ -272,19 +433,40 @@ function backToHero() {
   // 현재 슬라이드 다시 표시 및 재생
   setTimeout(() => {
     showSlide(index);
-    // 전환 완료 후 자동 슬라이드 재시작
-    setTimeout(() => {
-      startAutoSlide();
-    }, 1000);
+    // 전환 완료 후 자동 슬라이드 재시작 (비활성화됨)
+    // setTimeout(() => {
+    //   startAutoSlide();
+    // }, 1000);
   }, 100);
 
   // 스크롤을 맨 위로
   window.scrollTo(0, 0);
 }
 
+// 사용자 상호작용 이벤트 리스너들 - 모든 상호작용 감지
+const interactionEvents = ['click', 'touchstart', 'touchend', 'keydown', 'mousedown', 'pointerdown'];
+interactionEvents.forEach(eventType => {
+  document.addEventListener(eventType, enableUserInteraction, { once: true, passive: true });
+});
+
+// 추가적인 상호작용 감지 - 비디오 영역 클릭
+slides.forEach((slide, i) => {
+  slide.addEventListener('click', () => {
+    enableUserInteraction();
+    if (!isDetailView && !isTransitioning) {
+      console.log(`🎯 Slide ${i} clicked`);
+      // 현재 슬라이드 클릭 시 재생 강제 시도
+      if (i === index) {
+        playCurrentVideo();
+      }
+    }
+  });
+});
+
 // 이벤트 리스너
 if (nextBtn) {
   nextBtn.addEventListener('click', () => {
+    enableUserInteraction();
     if (!isDetailView && !isTransitioning) {
       nextSlide();
       resetAutoSlide();
@@ -294,6 +476,7 @@ if (nextBtn) {
 
 if (prevBtn) {
   prevBtn.addEventListener('click', () => {
+    enableUserInteraction();
     if (!isDetailView && !isTransitioning) {
       prevSlide();
       resetAutoSlide();
@@ -304,6 +487,7 @@ if (prevBtn) {
 // 모바일 터치 가이드 클릭 이벤트
 if (mobileTitleTrigger) {
   mobileTitleTrigger.addEventListener('click', () => {
+    enableUserInteraction();
     if (!isDetailView && !isTransitioning && isMobileDevice()) {
       const currentSlide = slides[index];
       const sectionId = currentSlide?.getAttribute('data-section');
@@ -329,6 +513,7 @@ window.addEventListener('wheel', (e) => {
   if (isMobileDevice()) return;
   
   e.preventDefault();
+  enableUserInteraction();
   
   const currentTime = Date.now();
   
@@ -358,7 +543,7 @@ window.addEventListener('wheel', (e) => {
   }, 2000);
 }, { passive: false });
 
-// 터치 이벤트 (모바일) - 스와이프 네비게이션만
+// 터치 이벤트 (모바일) - 스와이프 네비게이션
 let touchStartY = 0;
 let touchStartX = 0;
 let touchEndY = 0;
@@ -373,6 +558,7 @@ window.addEventListener('touchstart', (e) => {
 window.addEventListener('touchend', (e) => {
   if (!isMobileDevice()) return;
   
+  enableUserInteraction();
   const currentTime = Date.now();
   
   if (currentTime - lastTouchTime < scrollDelay) return;
@@ -414,9 +600,11 @@ function startAutoSlide() {
     clearInterval(autoSlide);
     autoSlide = setInterval(() => {
       if (!isDetailView && !isTransitioning) {
+        console.log('⏰ Auto-advancing to next slide');
         nextSlide();
       }
     }, 15000);
+    console.log('🔄 Auto-slide started');
   }
 }
 
@@ -427,6 +615,8 @@ function resetAutoSlide() {
 
 // 키보드 이벤트
 document.addEventListener('keydown', (e) => {
+  enableUserInteraction();
+  
   if (isDetailView) {
     if (e.key === 'Escape' || e.key === 'ArrowUp') {
       e.preventDefault();
@@ -456,17 +646,27 @@ document.addEventListener('keydown', (e) => {
 // 페이지 가시성 변경 시 처리 (탭 전환 등)
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
-    // 페이지가 숨겨질 때 모든 동영상 정지
+    console.log('👁️ Page hidden - stopping videos');
     stopAllVideos();
     clearInterval(autoSlide);
   } else {
-    // 페이지가 다시 보일 때 현재 동영상 재생
+    console.log('👁️ Page visible - resuming playback');
     if (!isDetailView) {
       setTimeout(() => {
         playCurrentVideo();
         startAutoSlide();
-      }, 500);
+      }, 1000);
     }
+  }
+});
+
+// 윈도우 포커스 이벤트
+window.addEventListener('focus', () => {
+  console.log('🎯 Window focused - ensuring playback');
+  if (!isDetailView && !isTransitioning) {
+    setTimeout(() => {
+      playCurrentVideo();
+    }, 500);
   }
 });
 
@@ -497,7 +697,7 @@ window.addEventListener('resize', () => {
 
 // 초기화 및 이벤트 설정
 window.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM Content Loaded');
+  console.log('🚀 DOM Content Loaded - Initializing');
   
   // 초기 페이지 카운터 설정
   updatePageCounter();
@@ -507,26 +707,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 유튜브 API 로딩 확인 및 초기화
   if (typeof YT !== 'undefined' && YT.Player) {
-    console.log('YouTube API already loaded');
+    console.log('✅ YouTube API already loaded');
     initializePlayers();
   } else {
-    console.log('Waiting for YouTube API...');
+    console.log('⏳ Waiting for YouTube API...');
     // API 로딩 대기
     let checkCount = 0;
     const checkAPI = setInterval(() => {
       checkCount++;
       if (typeof YT !== 'undefined' && YT.Player) {
-        console.log('YouTube API loaded after waiting');
+        console.log('✅ YouTube API loaded after waiting');
         clearInterval(checkAPI);
         initializePlayers();
       } else if (checkCount > 20) { // 10초 후 포기
-        console.error('YouTube API failed to load');
+        console.error('❌ YouTube API failed to load');
         clearInterval(checkAPI);
       }
     }, 500);
   }
-
-  
 
   // 초기 UI 상태 설정
   if (isMobileDevice()) {
@@ -541,5 +739,6 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }, 2000);
   }
-
+  
+  console.log('🎬 Initialization complete');
 });
