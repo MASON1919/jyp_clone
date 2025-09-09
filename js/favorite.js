@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 localStorage.setItem('pexelsFavorites', JSON.stringify(updatedFavorites));
                 
-                alert('즐겨찾기에서 삭제되었습니다.');
                 msnry.remove(item);
                 msnry.layout();
             });

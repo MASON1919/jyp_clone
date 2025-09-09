@@ -17,7 +17,7 @@ footer *{
 }
 
 /* 왼쪽(전체 클릭 링크) */
-.footer-left.as-link{ display:flex; align-items:center; gap:12px; }
+.footer-left.as-link{ display:flex; align-items:center; gap:12px;}
 .notice-label{ font-weight:700; letter-spacing:.04em; }
 .notice-text{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 

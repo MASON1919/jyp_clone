@@ -164,7 +164,7 @@ searchInput.addEventListener('keyup', (e) => {
 searchButton.addEventListener('click', startNewSearch);
 
 async function initialLoad() {
-    currentQuery = 'seoul';
+    currentQuery = 'concert';
     await displayImages();
 }
 initialLoad();

@@ -379,7 +379,7 @@
             const formattedPrice = new Intl.NumberFormat('ko-KR', { 
                 style: 'currency', 
                 currency: 'KRW' 
-            }).format(product.price * 1300);
+            }).format(Math.floor(product.price) * 1300);
             
             const isSoldOut = product.stock === 0;
             const cartButtonText = isSoldOut ? '품절' : '장바구니 담기';
